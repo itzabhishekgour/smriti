@@ -52,6 +52,11 @@ All features below have been manually verified end-to-end with real data.
 - ✅ **Env Injection:** Run commands with secrets dynamically injected into the environment (`smriti run my-project -- npm run dev`).
 - ✅ **Export:** Easily pull secrets into standard `.env` formats (`smriti pull my-project > .env`).
 
+### CI/CD & Secret Scanning
+- ✅ **GitHub Actions Sync:** One-click integration to sync secrets directly to GitHub repository environments.
+- ✅ **Render Sync:** Push your environment variables to Render services automatically.
+- ✅ **Secret Scanning (Git-Leak Prevention):** Proactive pre-commit hook (CLI) and reactive scheduled scans (via GitHub API) to detect accidentally committed credentials in repositories.
+
 ### Theming
 - ✅ **Dynamic UI:** Premium, glassmorphic UI with full Light/Dark/System theme support, persisted per-user.
 
