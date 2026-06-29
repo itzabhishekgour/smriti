@@ -27,28 +27,29 @@ export default function TermsPage() {
               Welcome to Smriti, a product by Tinexus. By using our website and services, you agree to these Terms of Service.
             </p>
 
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">1. Use of Service</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">1. Data Handling & Security</h2>
             <p>
-              Smriti is designed to store developer secrets, API keys, and environment variables. 
-              You are responsible for maintaining the confidentiality of your account credentials.
+              Smriti is designed to securely store secrets, API keys, and environment variables along with their metadata. All secrets are encrypted at rest using AES-256-GCM encryption, and all data is transmitted securely over HTTPS. However, you acknowledge that no electronic storage is 100% secure.
             </p>
 
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">2. Liability</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">2. Privacy & Third Parties</h2>
             <p>
-              While we use AES-256-GCM encryption to secure your data, Tinexus is not liable for any data loss, 
-              breaches, or damages resulting from the use of this service. Use the software at your own risk.
+              We do not sell, rent, or trade your personal data, nor the contents of your secrets, to any third parties. Your data remains strictly your own.
             </p>
 
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">3. Acceptable Use</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">3. Proprietary Rights</h2>
             <p>
-              You agree not to use the service for any illegal activities or to store malicious code, malware, 
-              or data that violates the rights of third parties.
+              Smriti is proprietary software owned by Tinexus. You are granted a limited, non-exclusive license to use the service. You may not copy, modify, distribute, reverse-engineer, or sell any part of this software without explicit written permission.
             </p>
 
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">4. Termination</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">4. Early Stage Notice & Limitation of Liability</h2>
             <p>
-              We reserve the right to terminate or suspend access to our service immediately, without prior notice or liability, 
-              for any reason whatsoever, including without limitation if you breach the Terms.
+              This is an early-stage tool provided "as is" without warranty of any kind. Tinexus is not liable for any data loss, breaches, or damages resulting from the use of this service. Exercise appropriate caution before storing mission-critical production secrets. Use the software at your own risk.
+            </p>
+
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">5. Contact Us</h2>
+            <p>
+              If you have any questions about these Terms, please contact us at legal@tinexus.com.
             </p>
           </div>
         </div>

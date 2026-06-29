@@ -30,6 +30,7 @@ public class SecurityConfig {
     // PasswordEncoder injected from PasswordEncoderConfig — NOT defined here
     // to avoid circular dependency: SecurityConfig → JwtAuthFilter → AuthService → PasswordEncoder → SecurityConfig
     private final PasswordEncoder passwordEncoder;
+    private final com.tinexus.smriti.config.OAuthSuccessHandler oauthSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,9 +40,18 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/login/oauth2/**").permitAll()
+                .requestMatchers("/oauth2/**").permitAll()
+                .requestMatchers("/api/integrations/github-account/callback").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .successHandler(oauthSuccessHandler)
+                // We don't define a custom failureUrl because spring boot oauth2 client by default redirects to /login?error 
+                // but we might want to redirect to frontend url instead.
+                // .failureUrl("http://localhost:5173/login?error=oauth-failed")
             )
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())

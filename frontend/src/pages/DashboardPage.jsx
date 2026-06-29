@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus, Key, FolderOpen, AlertTriangle, Search } from 'lucide-react'
+import { Plus, Key, FolderOpen, AlertTriangle, Search, FolderDown } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { projectService } from '../services/projectService'
 import { secretService } from '../services/secretService'
@@ -10,6 +10,8 @@ import ProjectForm from '../components/projects/ProjectForm'
 import SecretList from '../components/secrets/SecretList'
 import SecretForm from '../components/secrets/SecretForm'
 import ImportModal from '../components/secrets/ImportModal'
+import ImportGithubModal from '../components/projects/ImportGithubModal'
+import { githubAccountService } from '../services/githubAccountService'
 import Modal from '../components/ui/Modal'
 import Button from '../components/ui/Button'
 import { Skeleton } from '../components/ui/Skeleton'
@@ -53,6 +55,7 @@ export default function DashboardPage() {
   const [projectModal, setProjectModal] = useState({ open: false, data: null })
   const [secretModal, setSecretModal] = useState({ open: false, data: null })
   const [importModal, setImportModal] = useState(false)
+  const [importGithubModal, setImportGithubModal] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState({ open: false, data: null, type: '' })
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedQuery = useDebounce(searchQuery, 400)
@@ -101,6 +104,11 @@ export default function DashboardPage() {
     queryKey: ['secrets', debouncedQuery],
     queryFn: () => secretService.getAll(debouncedQuery || undefined),
     enabled: view === 'secrets',
+  })
+
+  const { data: accountStatus } = useQuery({
+    queryKey: ['githubAccountStatus'],
+    queryFn: () => githubAccountService.getStatus(),
   })
 
   // Mutations — Projects
@@ -232,6 +240,16 @@ export default function DashboardPage() {
             <Plus size={15} />
             {view === 'projects' ? 'New Project' : 'Add Secret'}
           </Button>
+          {view === 'projects' && accountStatus?.connected && (
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => setImportGithubModal(true)}
+            >
+              <FolderDown size={15} />
+              <span className="hidden sm:inline">Import from GitHub</span>
+            </Button>
+          )}
           <Button
             size="sm"
             variant="secondary"
@@ -252,6 +270,7 @@ export default function DashboardPage() {
           onEdit={(p) => setProjectModal({ open: true, data: p })}
           onDelete={(p) => setDeleteConfirm({ open: true, data: p, type: 'project' })}
           onExport={(p) => handleExportEnv(p.id, p.name)}
+          onImportGithub={accountStatus?.connected ? () => setImportGithubModal(true) : undefined}
         />
       ) : (
         <SecretList
@@ -330,6 +349,11 @@ export default function DashboardPage() {
           </div>
         </div>
       </Modal>
+
+      <ImportGithubModal 
+        open={importGithubModal} 
+        onClose={() => setImportGithubModal(false)} 
+      />
     </div>
   )
 }

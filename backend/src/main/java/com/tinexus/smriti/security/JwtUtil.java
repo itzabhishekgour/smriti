@@ -35,6 +35,42 @@ public class JwtUtil {
         return parseClaims(token).getSubject();
     }
 
+    public Claims extractAllClaims(String token) {
+        return parseClaims(token);
+    }
+
+    public String generateTokenWithPurpose(String email, String purpose, long customExpirationMs) {
+        return Jwts.builder()
+                .subject(email)
+                .claim("purpose", purpose)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + customExpirationMs))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateTokenWithPurpose(String email, String purpose, long customExpirationMs, String provider) {
+        return Jwts.builder()
+                .subject(email)
+                .claim("purpose", purpose)
+                .claim("provider", provider)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + customExpirationMs))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateTokenWithState(String subject, String purpose, long customExpirationMs, String jti) {
+        return Jwts.builder()
+                .subject(subject)
+                .claim("purpose", purpose)
+                .id(jti)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + customExpirationMs))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
     public boolean isTokenValid(String token) {
         try {
             parseClaims(token);

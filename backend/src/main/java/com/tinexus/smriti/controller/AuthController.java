@@ -32,4 +32,18 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(ApiResponse.success("Login successful", response));
     }
+
+    @PostMapping("/accept-terms")
+    public ResponseEntity<ApiResponse<AuthResponse>> acceptTerms(
+            @Valid @RequestBody com.tinexus.smriti.dto.request.AcceptTermsRequest request) {
+        AuthResponse response = authService.acceptTermsViaToken(request.tempToken());
+        return ResponseEntity.ok(ApiResponse.success("Terms accepted successfully", response));
+    }
+
+    @PostMapping("/link-oauth")
+    public ResponseEntity<ApiResponse<AuthResponse>> linkOAuth(
+            @Valid @RequestBody com.tinexus.smriti.dto.request.LinkAccountRequest request) {
+        AuthResponse response = authService.linkAccount(request.tempToken(), request.password());
+        return ResponseEntity.ok(ApiResponse.success("Account linked successfully", response));
+    }
 }

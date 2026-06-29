@@ -18,9 +18,10 @@ export function AuthProvider({ children }) {
       id:    authResponse.userId,
       email: authResponse.email,
       name:  authResponse.name,
+      hasPassword: authResponse.hasPassword,
     }))
     setToken(authResponse.token)
-    setUser({ id: authResponse.userId, email: authResponse.email, name: authResponse.name })
+    setUser({ id: authResponse.userId, email: authResponse.email, name: authResponse.name, hasPassword: authResponse.hasPassword })
   }, [])
 
   const logout = useCallback(() => {

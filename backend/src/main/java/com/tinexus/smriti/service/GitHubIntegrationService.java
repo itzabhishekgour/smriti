@@ -29,6 +29,7 @@ public class GitHubIntegrationService {
     private final SecretRepository secretRepository;
     private final EncryptionService encryptionService;
     private final AuditLogService auditLogService;
+    private final com.tinexus.smriti.repository.GitHubAccountConnectionRepository gitHubAccountConnectionRepository;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -37,8 +38,15 @@ public class GitHubIntegrationService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Project not found"));
 
+        String finalToken = accessToken;
+        if (finalToken == null || finalToken.trim().isEmpty()) {
+            GitHubAccountConnection connection = gitHubAccountConnectionRepository.findByUserId(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("No GitHub account connected and no PAT provided"));
+            finalToken = encryptionService.decrypt(connection.getEncryptedAccessToken());
+        }
+
         // Validate the access token by attempting to fetch the public key
-        fetchPublicKey(repoOwner, repoName, accessToken);
+        fetchPublicKey(repoOwner, repoName, finalToken);
 
         GitHubIntegration integration = gitHubIntegrationRepository.findByProjectId(projectId)
                 .orElse(new GitHubIntegration());
@@ -46,7 +54,7 @@ public class GitHubIntegrationService {
         integration.setProject(project);
         integration.setRepoOwner(repoOwner);
         integration.setRepoName(repoName);
-        integration.setEncryptedAccessToken(encryptionService.encrypt(accessToken));
+        integration.setEncryptedAccessToken(encryptionService.encrypt(finalToken));
 
         GitHubIntegration saved = gitHubIntegrationRepository.save(integration);
         return saved;

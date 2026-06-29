@@ -96,6 +96,12 @@ export default function ImportModal({ open, onClose, onImportSuccess }) {
       return
     }
 
+    const emptySecret = toImport.find(s => !s.value || s.value.trim() === '')
+    if (emptySecret) {
+      toast.error(`Cannot import! Secret '${emptySecret.key}' has an empty value. Please uncheck it.`)
+      return
+    }
+
     if (!projectId) {
       if (!newProjectName.trim()) {
         toast.error('Please select or create a project')
@@ -129,7 +135,8 @@ export default function ImportModal({ open, onClose, onImportSuccess }) {
       onImportSuccess(projectId)
       onClose()
     } catch (e) {
-      toast.error('Failed to import secrets')
+      console.error(e)
+      toast.error(e.response?.data?.message || 'Failed to import secrets')
     } finally {
       setLoading(false)
     }

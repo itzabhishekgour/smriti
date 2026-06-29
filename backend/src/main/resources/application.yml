@@ -1,4 +1,21 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:placeholder}
+            client-secret: ${GOOGLE_CLIENT_SECRET:placeholder}
+            scope: openid, profile, email
+          github:
+            client-id: ${GITHUB_OAUTH_CLIENT_ID:placeholder}
+            client-secret: ${GITHUB_OAUTH_CLIENT_SECRET:placeholder}
+            scope: user:email
+          github-repo:
+            provider: github
+            client-id: ${GITHUB_REPO_CLIENT_ID:placeholder}
+            client-secret: ${GITHUB_REPO_CLIENT_SECRET:placeholder}
+            scope: repo
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -40,6 +57,7 @@ jwt:
 
 smriti:
   aes-key: ${SMRITI_AES_KEY}
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
 
 gemini:
   api-key: ${GEMINI_API_KEY}

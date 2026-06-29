@@ -6,10 +6,13 @@ import Modal from '../../ui/Modal'
 import Card, { CardHeader, CardBody } from '../../ui/Card'
 import { Skeleton } from '../../ui/Skeleton'
 import { githubIntegrationService } from '../../../services/githubIntegrationService'
+import { githubAccountService } from '../../../services/githubAccountService'
 import toast from 'react-hot-toast'
 
 export default function GitHubIntegrationCard({ projectId, canEdit }) {
   const qc = useQueryClient()
+  const [activeTab, setActiveTab] = useState('oauth')
+  const [selectedRepo, setSelectedRepo] = useState('')
   const [repoOwner, setRepoOwner] = useState('')
   const [repoName, setRepoName] = useState('')
   const [accessToken, setAccessToken] = useState('')
@@ -22,6 +25,18 @@ export default function GitHubIntegrationCard({ projectId, canEdit }) {
     enabled: !!projectId && canEdit,
   })
 
+  const { data: accountStatus } = useQuery({
+    queryKey: ['githubAccountStatus'],
+    queryFn: () => githubAccountService.getStatus(),
+    enabled: canEdit && !status?.connected,
+  })
+
+  const { data: repos, isLoading: reposLoading } = useQuery({
+    queryKey: ['githubRepositories'],
+    queryFn: () => githubAccountService.getRepositories(),
+    enabled: !!accountStatus?.connected && activeTab === 'oauth' && !status?.connected,
+  })
+
   const connectMutation = useMutation({
     mutationFn: (data) => githubIntegrationService.connect(projectId, data),
     onSuccess: () => {
@@ -30,6 +45,7 @@ export default function GitHubIntegrationCard({ projectId, canEdit }) {
       setRepoOwner('')
       setRepoName('')
       setAccessToken('')
+      setSelectedRepo('')
     },
     onError: (e) => {
       toast.error(e.response?.data?.message || 'Failed to connect. Check PAT and repo details.')
@@ -87,56 +103,115 @@ export default function GitHubIntegrationCard({ projectId, canEdit }) {
 
       <CardBody className="!p-5">
       {!isConnected ? (
-        <form 
-          className="space-y-4"
-          onSubmit={e => {
-            e.preventDefault()
-            if (!repoOwner || !repoName || !accessToken) {
-              toast.error('All fields are required')
-              return
-            }
-            connectMutation.mutate({ repoOwner, repoName, accessToken })
-          }}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Repository Owner</label>
-              <input
-                className="input-base w-full"
-                placeholder="e.g. facebook"
-                value={repoOwner}
-                onChange={e => setRepoOwner(e.target.value)}
-              />
+        <div className="space-y-4">
+          <div className="flex border-b border-neutral-200 dark:border-neutral-800 mb-4">
+            <button
+              className={`pb-2 px-4 text-sm font-medium transition-colors border-b-2 ${activeTab === 'oauth' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
+              onClick={() => setActiveTab('oauth')}
+            >
+              Connected Account
+            </button>
+            <button
+              className={`pb-2 px-4 text-sm font-medium transition-colors border-b-2 ${activeTab === 'manual' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
+              onClick={() => setActiveTab('manual')}
+            >
+              Manual PAT (Backup)
+            </button>
+          </div>
+
+          {activeTab === 'oauth' ? (
+            <div className="space-y-4">
+              {accountStatus?.connected ? (
+                reposLoading ? (
+                  <Skeleton className="h-10 w-full" />
+                ) : (
+                  <form onSubmit={e => {
+                    e.preventDefault()
+                    if (!selectedRepo) {
+                      toast.error('Please select a repository')
+                      return
+                    }
+                    const [owner, name] = selectedRepo.split('/')
+                    connectMutation.mutate({ repoOwner: owner, repoName: name, accessToken: '' })
+                  }}>
+                    <label className="block text-sm font-medium mb-1">Select Repository</label>
+                    <select
+                      className="input-base w-full mb-4"
+                      value={selectedRepo}
+                      onChange={e => setSelectedRepo(e.target.value)}
+                    >
+                      <option value="">-- Choose a repository --</option>
+                      {repos?.map(r => (
+                        <option key={r.id} value={r.full_name}>{r.full_name} {r.private ? '(Private)' : ''}</option>
+                      ))}
+                    </select>
+                    <Button type="submit" loading={connectMutation.isPending}>
+                      Connect Selected Repository
+                    </Button>
+                  </form>
+                )
+              ) : (
+                <div className="text-sm text-neutral-500 space-y-3">
+                  <p>You haven't connected your GitHub account globally yet.</p>
+                  <Button variant="secondary" onClick={() => window.location.href = '/settings'}>
+                    Go to Settings to Connect Account
+                  </Button>
+                </div>
+              )}
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Repository Name</label>
-              <input
-                className="input-base w-full"
-                placeholder="e.g. react"
-                value={repoName}
-                onChange={e => setRepoName(e.target.value)}
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Personal Access Token (PAT)</label>
-            <input
-              type="password"
-              className="input-base w-full"
-              placeholder="ghp_..."
-              value={accessToken}
-              onChange={e => setAccessToken(e.target.value)}
-            />
-            <p className="text-xs text-neutral-500 mt-1.5">
-              Needs a fine-grained PAT with <strong>Secrets: Read & Write</strong> access to the repository, or a classic PAT with <strong>repo</strong> scope.
-            </p>
-          </div>
-          <div className="pt-2">
-            <Button type="submit" loading={connectMutation.isPending}>
-              Connect Repository
-            </Button>
-          </div>
-        </form>
+          ) : (
+            <form 
+              className="space-y-4"
+              onSubmit={e => {
+                e.preventDefault()
+                if (!repoOwner || !repoName || !accessToken) {
+                  toast.error('All fields are required')
+                  return
+                }
+                connectMutation.mutate({ repoOwner, repoName, accessToken })
+              }}
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Repository Owner</label>
+                  <input
+                    className="input-base w-full"
+                    placeholder="e.g. facebook"
+                    value={repoOwner}
+                    onChange={e => setRepoOwner(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Repository Name</label>
+                  <input
+                    className="input-base w-full"
+                    placeholder="e.g. react"
+                    value={repoName}
+                    onChange={e => setRepoName(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Personal Access Token (PAT)</label>
+                <input
+                  type="password"
+                  className="input-base w-full"
+                  placeholder="ghp_..."
+                  value={accessToken}
+                  onChange={e => setAccessToken(e.target.value)}
+                />
+                <p className="text-xs text-neutral-500 mt-1.5">
+                  Needs a fine-grained PAT with <strong>Secrets: Read & Write</strong> access to the repository, or a classic PAT with <strong>repo</strong> scope.
+                </p>
+              </div>
+              <div className="pt-2">
+                <Button type="submit" loading={connectMutation.isPending}>
+                  Connect Repository
+                </Button>
+              </div>
+            </form>
+          )}
+        </div>
       ) : (
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-neutral-100 dark:border-neutral-800 gap-4">

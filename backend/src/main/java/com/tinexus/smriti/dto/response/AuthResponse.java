@@ -7,5 +7,6 @@ public record AuthResponse(
         String email,
         String name,
         UUID userId,
-        String theme
+        String theme,
+        boolean hasPassword
 ) {}

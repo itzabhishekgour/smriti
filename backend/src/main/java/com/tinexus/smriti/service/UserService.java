@@ -26,4 +26,25 @@ public class UserService {
         user.setTheme(newTheme);
         userRepository.save(user);
     }
+
+    public User getCurrentUser(String email) {
+        return authService.getCurrentUser(email);
+    }
+
+    @Transactional
+    public void updatePassword(String email, com.tinexus.smriti.dto.request.PasswordUpdateRequest request) {
+        User user = authService.getCurrentUser(email);
+        
+        if (user.getPasswordHash() != null && !user.getPasswordHash().equals("OAUTH_USER")) {
+            if (request.currentPassword() == null || request.currentPassword().isBlank()) {
+                throw new IllegalArgumentException("Current password is required");
+            }
+            if (!authService.getPasswordEncoder().matches(request.currentPassword(), user.getPasswordHash())) {
+                throw new com.tinexus.smriti.exception.UnauthorizedException("Invalid current password");
+            }
+        }
+        
+        user.setPasswordHash(authService.getPasswordEncoder().encode(request.newPassword()));
+        userRepository.save(user);
+    }
 }

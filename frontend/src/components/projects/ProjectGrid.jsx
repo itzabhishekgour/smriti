@@ -1,10 +1,10 @@
 import ProjectCard from './ProjectCard'
 import { SkeletonCard } from '../ui/Skeleton'
 import EmptyState from '../ui/EmptyState'
-import { FolderOpen } from 'lucide-react'
+import { FolderOpen, FolderDown } from 'lucide-react'
 import Button from '../ui/Button'
 
-export default function ProjectGrid({ projects, loading, onNew, onEdit, onDelete, onExport }) {
+export default function ProjectGrid({ projects, loading, onNew, onEdit, onDelete, onExport, onImportGithub }) {
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -20,9 +20,17 @@ export default function ProjectGrid({ projects, loading, onNew, onEdit, onDelete
         title="No projects yet"
         description="Create your first project to start storing secrets with context."
         action={
-          <Button onClick={onNew} size="sm">
-            Create Project
-          </Button>
+          <div className="flex items-center justify-center gap-3">
+            <Button onClick={onNew} size="sm">
+              Create Project
+            </Button>
+            {onImportGithub && (
+              <Button onClick={onImportGithub} size="sm" variant="secondary">
+                <FolderDown size={15} />
+                Import from GitHub
+              </Button>
+            )}
+          </div>
         }
       />
     )

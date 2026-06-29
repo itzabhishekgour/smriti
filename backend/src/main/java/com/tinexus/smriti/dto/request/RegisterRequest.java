@@ -15,5 +15,8 @@ public record RegisterRequest(
 
         @NotBlank(message = "Password is required")
         @Size(min = 8, message = "Password must be at least 8 characters")
-        String password
+        String password,
+
+        @jakarta.validation.constraints.AssertTrue(message = "You must accept the Terms & Conditions")
+        boolean acceptedTerms
 ) {}

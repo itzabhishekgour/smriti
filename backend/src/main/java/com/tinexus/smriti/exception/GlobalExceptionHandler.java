@@ -44,6 +44,23 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(false, "Validation failed", errors));
     }
 
+    @ExceptionHandler(org.springframework.web.method.annotation.HandlerMethodValidationException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleMethodValidation(
+            org.springframework.web.method.annotation.HandlerMethodValidationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getAllValidationResults().forEach(result -> {
+            result.getResolvableErrors().forEach(error -> {
+                String field = result.getMethodParameter().getParameterName();
+                if (error instanceof FieldError fe) {
+                    field = fe.getField();
+                }
+                errors.put(field, error.getDefaultMessage());
+            });
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>(false, "Bulk Validation failed", errors));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

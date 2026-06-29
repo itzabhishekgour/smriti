@@ -36,4 +36,15 @@ public class User {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "accepted_terms_at")
+    private LocalDateTime acceptedTermsAt;
+
+    @Column(name = "terms_version", length = 20)
+    @Builder.Default
+    private String termsVersion = "v1";
+
+    @Column(name = "auth_provider", nullable = false, length = 50)
+    @Builder.Default
+    private String authProvider = "EMAIL";
 }

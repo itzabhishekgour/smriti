@@ -11,6 +11,9 @@ import LandingPage from './pages/LandingPage'
 import PrivacyPage from './pages/PrivacyPage'
 import TermsPage from './pages/TermsPage'
 import PublicSharePage from './pages/PublicSharePage'
+import OAuthCallbackPage from './pages/OAuthCallbackPage'
+import AcceptTermsPage from './pages/AcceptTermsPage'
+import LinkAccountPage from './pages/LinkAccountPage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -34,6 +37,11 @@ export default function App() {
       {/* Static / Informational Pages */}
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
+
+      {/* OAuth Flows */}
+      <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
+      <Route path="/accept-terms" element={<AcceptTermsPage />} />
+      <Route path="/link-account" element={<LinkAccountPage />} />
 
       {/* Protected */}
       <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
