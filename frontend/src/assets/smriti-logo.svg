@@ -1,0 +1,50 @@
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="smriti-shield-grad" x1="0%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="60%" stop-color="#1D4ED8"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <linearGradient id="smriti-accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Shield: blue-dominant gradient -->
+  <path d="M150 48
+           L 234 79
+           C 234 79, 237 166, 234 191
+           C 228 222, 193 247, 150 259
+           C 107 247, 72 222, 66 191
+           C 63 166, 66 79, 66 79
+           Z"
+        fill="url(#smriti-shield-grad)"/>
+
+  <!-- Orange accent edge -->
+  <path d="M234 79 L 234 191
+           C 228 222, 193 247, 150 259
+           L 150 245
+           C 185 232, 212 212, 218 188
+           C 221 165, 219 90, 219 90
+           Z"
+        fill="url(#smriti-accent-grad)" opacity="0.9"/>
+
+  <!-- Pixel particles — Tinexus dissolve effect -->
+  <rect x="248" y="58" width="8" height="8" rx="1.5" fill="#FBBF24"/>
+  <rect x="260" y="68" width="6" height="6" rx="1.5" fill="#3B82F6"/>
+  <rect x="244" y="44" width="5" height="5" rx="1" fill="#3B82F6"/>
+  <rect x="266" y="52" width="4" height="4" rx="1" fill="#EA580C"/>
+
+  <!-- Padlock shackle -->
+  <path
+    d="M122 136 C 122 114, 133 100, 150 100 C 167 100, 178 114, 178 136"
+    fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round"
+  />
+
+  <!-- Lock body -->
+  <rect fill="#FFFFFF" x="106" y="133" width="88" height="76" rx="14"/>
+
+  <!-- S letter -->
+  <text x="150" y="193" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="800" fill="#1D4ED8" text-anchor="middle">S</text>
+</svg>
