@@ -17,6 +17,7 @@ import LinkShareModal from '../components/projects/LinkShareModal'
 import AuditLogList from '../components/projects/AuditLogList'
 import GitHubIntegrationCard from '../components/projects/integrations/GitHubIntegrationCard'
 import RenderIntegrationCard from '../components/projects/integrations/RenderIntegrationCard'
+import SecurityFindingsList from '../components/projects/security/SecurityFindingsList'
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams()
@@ -206,6 +207,14 @@ export default function ProjectDetailPage() {
         <RenderIntegrationCard 
           projectId={projectId} 
           role={project?.userRole || (project?.isOwner ? 'OWNER' : 'VIEWER')} 
+        />
+      </div>
+
+      {/* Security Findings */}
+      <div className="mt-8">
+        <SecurityFindingsList 
+          projectId={projectId} 
+          isEditor={project?.isOwner || project?.userRole === 'EDITOR'} 
         />
       </div>
 
