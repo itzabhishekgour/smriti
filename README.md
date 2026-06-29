@@ -39,6 +39,11 @@ All features below have been manually verified end-to-end with real data.
 - ✅ **Rich Metadata:** Track origin notes, tags, environments, and expiry dates.
 - ✅ **Version History:** Non-destructive historical timelines for every secret. Rollback to older versions with one click while archiving the current state.
 
+### Authentication & Account Management
+- ✅ **OAuth Integration:** Secure "Login with GitHub" flow allowing users to sign up and authenticate effortlessly.
+- ✅ **Account Linking:** Existing users can link their GitHub accounts to their Tinexus profiles from the newly designed Settings page.
+- ✅ **Session Management:** Robust JWT-based authentication with secure token handling and seamless redirect flows.
+
 ### Security
 - ✅ **Encryption at Rest:** All secret values are encrypted in the database using AES-256-GCM.
 - ✅ **Audit Logging:** Comprehensive tracking of all actions (Created, Viewed, Updated, Rolled Back). Owners see full project logs; users only see their own activity.
