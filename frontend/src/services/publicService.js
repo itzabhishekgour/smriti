@@ -3,7 +3,7 @@ import axios from 'axios'
 // We create a fresh axios instance without interceptors
 // so it doesn't try to send Auth headers or handle 401s by redirecting to login.
 const publicApi = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json'
   }

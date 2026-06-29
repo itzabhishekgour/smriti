@@ -6,13 +6,12 @@ import Logo from '../components/ui/Logo'
 export default function OAuthCallbackPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { login, setToken } = useAuth()
+  const { login } = useAuth()
 
   useEffect(() => {
     const token = searchParams.get('token')
     if (token) {
-      // Temporarily store token so the API request can use it (or we can just pass it directly in the fetch header)
-      fetch('http://localhost:8080/api/users/me', {
+      fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/users/me`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => res.json())
@@ -37,7 +36,7 @@ export default function OAuthCallbackPage() {
     } else {
       navigate('/login?error=missing-token')
     }
-  }, [searchParams, navigate, login, setToken])
+  }, [searchParams, navigate, login])
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col items-center justify-center p-4">
