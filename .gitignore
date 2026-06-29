@@ -1,0 +1,27 @@
+# ─── Backend ─────────────────────────────────────────────────────────────────
+backend/.env
+backend/build/
+backend/.gradle/
+backend/out/
+backend/*.class
+
+# ─── Frontend ────────────────────────────────────────────────────────────────
+frontend/.env
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ─── CLI ─────────────────────────────────────────────────────────────────────
+cli/node_modules/
+cli/.env
+
+# ─── IDE ─────────────────────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
