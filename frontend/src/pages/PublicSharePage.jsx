@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Key, Download, Lock, Mail, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react'
 import toast from 'react-hot-toast'
