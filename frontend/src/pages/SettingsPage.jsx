@@ -11,7 +11,7 @@ import Modal from '../components/ui/Modal'
 import { authService } from '../services/authService'
 
 export default function SettingsPage() {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const { theme, setTheme } = useTheme()
   const [searchParams] = useSearchParams()
   const [githubState, setGithubState] = useState({ loading: true, connected: false, username: null })
@@ -298,7 +298,7 @@ export default function SettingsPage() {
           </p>
           <button
             onClick={() => {
-              localStorage.removeItem('token')
+              logout()
               window.location.href = '/login'
             }}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-danger-600 dark:text-danger-400 bg-danger-50 dark:bg-danger-900/30 hover:bg-danger-100 dark:hover:bg-danger-900/50 rounded-md transition-colors"

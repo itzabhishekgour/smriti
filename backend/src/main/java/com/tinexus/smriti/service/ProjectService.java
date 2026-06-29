@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -27,6 +29,7 @@ public class ProjectService {
     private final SecretRepository secretRepository;
     private final ProjectShareRepository projectShareRepository;
     private final AuditLogService auditLogService;
+    private final JdbcTemplate jdbcTemplate;
 
     public List<ProjectResponse> getAllProjects(User user) {
         return projectRepository.findAccessibleProjects(user.getId())
@@ -80,6 +83,16 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId).orElse(null);
         if (project != null) {
             String projectName = project.getName();
+            
+            // Delete dependent records using native SQL to avoid N+1 and FK constraint violations
+            jdbcTemplate.update("DELETE FROM secret_scan_findings WHERE project_id = ?", projectId);
+            jdbcTemplate.update("DELETE FROM project_shares WHERE project_id = ?", projectId);
+            jdbcTemplate.update("DELETE FROM project_links WHERE project_id = ?", projectId);
+            jdbcTemplate.update("DELETE FROM render_integrations WHERE project_id = ?", projectId);
+            jdbcTemplate.update("DELETE FROM github_integrations WHERE project_id = ?", projectId);
+            jdbcTemplate.update("DELETE FROM secret_versions WHERE secret_id IN (SELECT id FROM secrets WHERE project_id = ?)", projectId);
+            jdbcTemplate.update("DELETE FROM secrets WHERE project_id = ?", projectId);
+
             projectRepository.deleteById(projectId);
             auditLogService.log(user.getId(), com.tinexus.smriti.model.ActionType.PROJECT_DELETED, "PROJECT", projectId, projectName, projectId, "{}");
         }
