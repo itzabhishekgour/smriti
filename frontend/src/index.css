@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base Reset ───────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-neutral-50 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-200 antialiased;
+    min-height: 100vh;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-neutral-300 dark:bg-neutral-700 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-neutral-400 dark:bg-neutral-600; }
+
+  /* Selection */
+  ::selection { @apply bg-primary-100 dark:bg-primary-900 text-primary-900 dark:text-primary-100; }
+
+  h1, h2, h3, h4, h5, h6 { @apply font-semibold text-neutral-900 dark:text-neutral-50; }
+  p { @apply text-neutral-600 dark:text-neutral-400; }
+  a { @apply text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors; }
+
+  input, textarea, select {
+    @apply outline-none bg-transparent;
+  }
+}
+
+/* ─── Component Layer ─────────────────────────────────────────────────────── */
+@layer components {
+  /* Focus ring — accessible, clean */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950;
+  }
+
+  /* Card surface */
+  .card {
+    @apply bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg;
+  }
+  .card-hover {
+    @apply card hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-md transition-all duration-150 cursor-pointer;
+  }
+
+  /* Form input base */
+  .input-base {
+    @apply w-full px-3 py-2 text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-md
+           text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 dark:placeholder-neutral-500
+           hover:border-neutral-300 dark:hover:border-neutral-700
+           focus:border-primary-500 dark:focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900
+           transition-all duration-150;
+  }
+  .input-error {
+    @apply border-danger-500 dark:border-danger-500 focus:border-danger-500 dark:focus:border-danger-500 focus:ring-danger-100 dark:focus:ring-danger-700;
+  }
+
+  /* Button variants */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-md
+           transition-all duration-150 select-none whitespace-nowrap cursor-pointer
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-sm  { @apply btn text-xs px-3 py-1.5; }
+  .btn-md  { @apply btn text-sm px-4 py-2; }
+  .btn-lg  { @apply btn text-base px-5 py-2.5; }
+
+  .btn-primary {
+    @apply bg-primary-600 dark:bg-primary-600 text-white hover:bg-primary-700 dark:hover:bg-primary-500 shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700
+           hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 shadow-sm;
+  }
+
+  .btn-ghost {
+    @apply text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-800 dark:hover:text-neutral-200;
+  }
+
+  .btn-danger {
+    @apply bg-danger-600 dark:bg-danger-600 text-white hover:bg-danger-700 dark:hover:bg-danger-500 shadow-sm;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+  .badge-prod    { @apply badge bg-danger-100 dark:bg-danger-900 text-danger-700 dark:text-danger-400 border border-danger-200 dark:border-danger-800; }
+  .badge-staging { @apply badge bg-warning-100 dark:bg-warning-900 text-warning-700 dark:text-warning-400 border border-warning-200 dark:border-warning-800; }
+  .badge-test    { @apply badge bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-400 border border-primary-200 dark:border-primary-800; }
+  .badge-dev     { @apply badge bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700; }
+  .badge-success { @apply badge bg-success-100 dark:bg-success-900 text-success-700 dark:text-success-400 border border-success-200 dark:border-success-800; }
+  .badge-neutral { @apply badge bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700; }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse overflow-hidden relative;
+  }
+
+  /* Section header */
+  .section-header {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  /* Divider */
+  .divider { @apply border-t border-neutral-200 dark:border-neutral-800; }
+
+  /* Icon button */
+  .icon-btn {
+    @apply p-2 rounded-md text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800
+           transition-all duration-150 cursor-pointer;
+  }
+
+  /* Sidebar nav item */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400
+           rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-200
+           transition-all duration-150 cursor-pointer select-none;
+  }
+  .nav-item-active {
+    @apply nav-item bg-primary-50 dark:bg-primary-900 text-primary-700 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900 hover:text-primary-700 dark:hover:text-primary-400;
+  }
+
+  /* Modal overlay */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center p-4
+           bg-neutral-900/50 dark:bg-neutral-950 backdrop-blur-sm animate-fade-in;
+  }
+  .modal-panel {
+    @apply w-full max-w-md bg-white dark:bg-neutral-900 rounded-xl shadow-xl border border-neutral-200 dark:border-neutral-800
+           animate-scale-in overflow-hidden;
+  }
+
+  /* Copy button states */
+  .copy-btn {
+    @apply icon-btn;
+  }
+  .copy-btn-success {
+    @apply text-success-600 dark:text-success-400 bg-success-50 dark:bg-success-900 hover:bg-success-50 dark:hover:bg-success-900 hover:text-success-600 dark:hover:text-success-400;
+  }
+
+  /* Empty state */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-16 px-6 text-center;
+  }
+
+  /* Tag pill */
+  .tag-pill {
+    @apply inline-flex items-center text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400
+           rounded-full font-medium border border-transparent dark:border-neutral-700;
+  }
+
+  /* Secret value reveal */
+  .secret-masked {
+    @apply font-mono text-sm tracking-widest text-neutral-400 dark:text-neutral-600;
+  }
+  .secret-value {
+    @apply font-mono text-sm text-neutral-800 dark:text-neutral-200 break-all;
+  }
+}
+
+/* ─── Utility Layer ──────────────────────────────────────────────────────────*/
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
