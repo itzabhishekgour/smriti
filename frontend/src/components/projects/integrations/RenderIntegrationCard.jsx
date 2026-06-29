@@ -99,26 +99,26 @@ const RenderIntegrationCard = ({ projectId, role }) => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-100 p-6 flex justify-center items-center h-48">
+      <div className="card p-6 flex justify-center items-center h-48">
         <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden relative">
-      <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+    <div className="card overflow-hidden relative">
+      <div className="p-6 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-100">
-            <Cloud className="w-5 h-5 text-gray-700" />
+          <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200">
+            <Cloud className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Render</h3>
-            <p className="text-sm text-gray-500">Sync secrets to Render service environment variables</p>
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Render</h3>
+            <p className="text-sm text-neutral-500">Sync secrets to Render service environment variables</p>
           </div>
         </div>
         {status?.connected && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-500/20">
             <Check className="w-3.5 h-3.5" />
             Connected
           </span>
@@ -127,9 +127,9 @@ const RenderIntegrationCard = ({ projectId, role }) => {
 
       <div className="p-6">
         {!isEditor && (
-          <div className="mb-6 p-4 bg-amber-50 rounded-lg border border-amber-200 flex gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
-            <p className="text-sm text-amber-800">
+          <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-500/10 rounded-lg border border-amber-200 dark:border-amber-500/20 flex gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+            <p className="text-sm text-amber-800 dark:text-amber-200">
               Only project Owners and Editors can manage integrations.
             </p>
           </div>
@@ -137,15 +137,15 @@ const RenderIntegrationCard = ({ projectId, role }) => {
 
         {status?.connected ? (
           <div className="space-y-6">
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+            <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-4 border border-neutral-100 dark:border-neutral-800">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Connected Service</p>
-                  <p className="text-sm text-gray-500 mt-1">{status.serviceName} ({status.serviceId})</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Connected Service</p>
+                  <p className="text-sm text-neutral-500 mt-1">{status.serviceName} ({status.serviceId})</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">Last Synced</p>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Last Synced</p>
+                  <p className="text-sm text-neutral-500 mt-1">
                     {status.lastSyncedAt ? new Date(status.lastSyncedAt).toLocaleString() : 'Never'}
                   </p>
                 </div>
@@ -178,45 +178,45 @@ const RenderIntegrationCard = ({ projectId, role }) => {
         ) : (
           <form onSubmit={handleConnect} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium mb-1">
                 Render Service ID
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Hash className="h-5 w-5 text-gray-400" />
+                  <Hash className="h-5 w-5 text-neutral-400" />
                 </div>
                 <input
                   type="text"
                   value={serviceId}
                   onChange={(e) => setServiceId(e.target.value)}
                   disabled={!isEditor || actionLoading}
-                  className="pl-10 block w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2"
+                  className="input-base pl-10 block w-full py-2"
                   placeholder="srv-cxxxxxxxxxxxxxxxxxx"
                   required
                 />
               </div>
-              <p className="mt-1 text-xs text-gray-500">Find this in your Render dashboard URL: render.com/web/srv-...</p>
+              <p className="mt-1 text-xs text-neutral-500">Find this in your Render dashboard URL: render.com/web/srv-...</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium mb-1">
                 Render API Key
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Key className="h-5 w-5 text-gray-400" />
+                  <Key className="h-5 w-5 text-neutral-400" />
                 </div>
                 <input
                   type="password"
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                   disabled={!isEditor || actionLoading}
-                  className="pl-10 block w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2"
+                  className="input-base pl-10 block w-full py-2"
                   placeholder="rnd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                   required
                 />
               </div>
-              <p className="mt-1 text-xs text-gray-500">Generate an API key in your Render Account Settings</p>
+              <p className="mt-1 text-xs text-neutral-500">Generate an API key in your Render Account Settings</p>
             </div>
 
             {isEditor && (
@@ -234,67 +234,67 @@ const RenderIntegrationCard = ({ projectId, role }) => {
 
       {/* Preview Modal */}
       {showPreview && previewData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">Sync Preview</h3>
-              <p className="text-sm text-gray-500 mt-1">Review the changes before applying them to Render</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-xl w-full max-w-lg overflow-hidden border border-neutral-200 dark:border-neutral-800">
+            <div className="p-6 border-b border-neutral-100 dark:border-neutral-800">
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Sync Preview</h3>
+              <p className="text-sm text-neutral-500 mt-1">Review the changes before applying them to Render</p>
             </div>
             
             <div className="p-6 space-y-4">
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800 flex items-start gap-2">
+              <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-lg p-3 text-sm text-amber-800 dark:text-amber-200 flex items-start gap-2">
                 <AlertTriangle className="w-5 h-5 flex-shrink-0" />
                 <p>Render replaces all environment variables on sync. Smriti will safely merge your secrets with the existing variables on Render.</p>
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                  <span className="block text-2xl font-bold text-green-600">{previewData.newCount}</span>
-                  <span className="text-xs font-medium text-gray-500 uppercase">New</span>
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 border border-neutral-100 dark:border-neutral-800">
+                  <span className="block text-2xl font-bold text-green-600 dark:text-green-500">{previewData.newCount}</span>
+                  <span className="text-xs font-medium text-neutral-500 uppercase">New</span>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                  <span className="block text-2xl font-bold text-blue-600">{previewData.updatedCount}</span>
-                  <span className="text-xs font-medium text-gray-500 uppercase">Updated</span>
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 border border-neutral-100 dark:border-neutral-800">
+                  <span className="block text-2xl font-bold text-blue-600 dark:text-blue-500">{previewData.updatedCount}</span>
+                  <span className="text-xs font-medium text-neutral-500 uppercase">Updated</span>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                  <span className="block text-2xl font-bold text-gray-600">{previewData.preservedCount}</span>
-                  <span className="text-xs font-medium text-gray-500 uppercase">Preserved</span>
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 border border-neutral-100 dark:border-neutral-800">
+                  <span className="block text-2xl font-bold text-neutral-600 dark:text-neutral-400">{previewData.preservedCount}</span>
+                  <span className="text-xs font-medium text-neutral-500 uppercase">Preserved</span>
                 </div>
               </div>
               
-              <div className="max-h-40 overflow-y-auto border border-gray-100 rounded-lg text-sm bg-gray-50 p-2">
+              <div className="max-h-40 overflow-y-auto border border-neutral-100 dark:border-neutral-800 rounded-lg text-sm bg-neutral-50 dark:bg-neutral-800/50 p-2">
                 {previewData.newKeys.length > 0 && (
                   <div className="mb-2">
-                    <span className="text-xs font-semibold text-green-600 uppercase px-1">Will be added:</span>
+                    <span className="text-xs font-semibold text-green-600 dark:text-green-500 uppercase px-1">Will be added:</span>
                     <div className="flex flex-wrap gap-1 mt-1 px-1">
-                      {previewData.newKeys.map(k => <span key={k} className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded">{k}</span>)}
+                      {previewData.newKeys.map(k => <span key={k} className="bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300 text-xs px-2 py-0.5 rounded">{k}</span>)}
                     </div>
                   </div>
                 )}
                 {previewData.updatedKeys.length > 0 && (
                   <div className="mb-2">
-                    <span className="text-xs font-semibold text-blue-600 uppercase px-1">Will be updated:</span>
+                    <span className="text-xs font-semibold text-blue-600 dark:text-blue-500 uppercase px-1">Will be updated:</span>
                     <div className="flex flex-wrap gap-1 mt-1 px-1">
-                      {previewData.updatedKeys.map(k => <span key={k} className="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">{k}</span>)}
+                      {previewData.updatedKeys.map(k => <span key={k} className="bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 text-xs px-2 py-0.5 rounded">{k}</span>)}
                     </div>
                   </div>
                 )}
                 {previewData.preservedKeys.length > 0 && (
                   <div>
-                    <span className="text-xs font-semibold text-gray-600 uppercase px-1">Render-only (Unchanged):</span>
+                    <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-400 uppercase px-1">Render-only (Unchanged):</span>
                     <div className="flex flex-wrap gap-1 mt-1 px-1">
-                      {previewData.preservedKeys.map(k => <span key={k} className="bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded">{k}</span>)}
+                      {previewData.preservedKeys.map(k => <span key={k} className="bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs px-2 py-0.5 rounded">{k}</span>)}
                     </div>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+            <div className="p-4 border-t border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 flex justify-end gap-3">
               <button
                 onClick={() => setShowPreview(false)}
                 disabled={actionLoading}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors"
               >
                 Cancel
               </button>
