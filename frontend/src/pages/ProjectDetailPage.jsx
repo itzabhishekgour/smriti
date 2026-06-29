@@ -16,6 +16,7 @@ import ShareModal from '../components/projects/ShareModal'
 import LinkShareModal from '../components/projects/LinkShareModal'
 import AuditLogList from '../components/projects/AuditLogList'
 import GitHubIntegrationCard from '../components/projects/integrations/GitHubIntegrationCard'
+import RenderIntegrationCard from '../components/projects/integrations/RenderIntegrationCard'
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams()
@@ -197,10 +198,14 @@ export default function ProjectDetailPage() {
       />
 
       {/* Integrations */}
-      <div className="mt-8">
+      <div className="mt-8 space-y-4">
         <GitHubIntegrationCard 
           projectId={projectId} 
           canEdit={project?.isOwner || project?.userRole === 'EDITOR'} 
+        />
+        <RenderIntegrationCard 
+          projectId={projectId} 
+          role={project?.userRole || (project?.isOwner ? 'OWNER' : 'VIEWER')} 
         />
       </div>
 
