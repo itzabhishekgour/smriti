@@ -1,12 +1,22 @@
+import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import MobileNav from './MobileNav'
+import GlobalAiSearch from './GlobalAiSearch'
 
 export default function DashboardLayout() {
+  const [isAiSearchOpen, setIsAiSearchOpen] = useState(false)
+
+  useEffect(() => {
+    const handleOpen = () => setIsAiSearchOpen(true)
+    document.addEventListener('open-ai-search', handleOpen)
+    return () => document.removeEventListener('open-ai-search', handleOpen)
+  }, [])
+
   return (
     <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-950">
       {/* Desktop sidebar */}
-      <Sidebar />
+      <Sidebar onOpenAiSearch={() => setIsAiSearchOpen(true)} />
 
       {/* Main content */}
       <main className="flex-1 min-w-0 flex flex-col w-full">
@@ -16,7 +26,9 @@ export default function DashboardLayout() {
       </main>
 
       {/* Mobile nav */}
-      <MobileNav />
+      <MobileNav onOpenAiSearch={() => setIsAiSearchOpen(true)} />
+
+      <GlobalAiSearch isOpen={isAiSearchOpen} onClose={() => setIsAiSearchOpen(false)} />
     </div>
   )
 }

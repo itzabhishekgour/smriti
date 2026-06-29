@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, FolderOpen, Settings, LogOut } from 'lucide-react'
+import { LayoutDashboard, FolderOpen, Settings, LogOut, Sparkles } from 'lucide-react'
 import Logo from '../ui/Logo'
 import { useAuth } from '../../hooks/useAuth'
 import { cn } from '../../utils/cn'
@@ -11,7 +11,7 @@ const navItems = [
   { to: '/settings',   icon: Settings,        label: 'Settings'  },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ onOpenAiSearch }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
 
@@ -50,6 +50,15 @@ export default function Sidebar() {
             <span>{label}</span>
           </NavLink>
         ))}
+
+        <button
+          onClick={onOpenAiSearch}
+          className="w-full mt-4 flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 dark:text-indigo-400 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 transition-colors"
+        >
+          <Sparkles size={16} />
+          <span>Ask Smriti (AI)</span>
+          <span className="ml-auto text-[10px] bg-white/50 dark:bg-black/20 px-1.5 py-0.5 rounded border border-indigo-200 dark:border-indigo-800">Ctrl+K</span>
+        </button>
       </nav>
 
       {/* User + Logout */}

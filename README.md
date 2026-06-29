@@ -22,6 +22,7 @@ While enterprise secret managers (like HashiCorp Vault, Doppler, or Infisical) f
 Key differentiators implemented and verified in this project:
 
 - **🤖 AI-Powered Context Search:** Smriti uses semantic search over the natural-language "origin story" of a secret. You can search for *"that stripe key I made for the checkout bug"* and find it, even if the secret name is just `SK_TEST_XYZ`.
+- **💬 Ask Smriti (AI Chat):** A global `Ctrl+K` search interface where you can ask natural language questions (e.g. "what is my database password?"). Smriti uses secure metadata search combined with Google Gemini to give you conversational answers while keeping your decrypted secrets 100% private and out of the LLM's context window.
 - **🤖 AI Auto-Parsing:** Write a messy free-text note like *"Here is the dev api key for aws us-east-1"* and Smriti's AI automatically extracts and categorizes the service name, environment, and tags.
 - **🤖 Bulk AI Import:** Paste raw, unstructured text (like a chat log from a coworker or a raw JSON dump), and the AI will parse it into structured individual secrets ready to be saved.
 - **🔗 Secure Magic Links (2FA):** Need to share a secret with a contractor or client who doesn't have a Smriti account? Generate a password-protected Magic Link. Smriti enforces an Email OTP challenge before the secret can be viewed, complete with brute-force lockouts.
