@@ -4,6 +4,10 @@ import { Shield, ShieldAlert, Check, Loader2, RefreshCw } from 'lucide-react';
 import { securityService } from '../../../services/securityService';
 import toast from 'react-hot-toast';
 import Button from '../../ui/Button';
+import Card, { CardHeader, CardBody } from '../../ui/Card';
+import EmptyState from '../../ui/EmptyState';
+import { Skeleton } from '../../ui/Skeleton';
+import Badge from '../../ui/Badge';
 
 const SecurityFindingsList = ({ projectId, isEditor }) => {
   const qc = useQueryClient();
@@ -37,20 +41,27 @@ const SecurityFindingsList = ({ projectId, isEditor }) => {
   };
 
   if (isLoading) {
-    return <div className="card p-6 h-32 animate-pulse" />;
+    return (
+      <Card className="mt-8">
+        <CardBody className="space-y-4">
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </CardBody>
+      </Card>
+    );
   }
 
   const hasFindings = findings && findings.length > 0;
 
   return (
-    <div className="card overflow-hidden">
-      <div className="p-6 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between bg-neutral-50 dark:bg-neutral-800/20">
+    <Card className="mt-8">
+      <CardHeader className="flex items-center justify-between bg-neutral-50 dark:bg-neutral-800/20 !py-4">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${hasFindings ? 'bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400' : 'bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400'}`}>
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${hasFindings ? 'bg-danger-100 dark:bg-danger-900/30 text-danger-600 dark:text-danger-400' : 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'}`}>
             {hasFindings ? <ShieldAlert size={20} /> : <Shield size={20} />}
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Security Findings</h3>
+            <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">Security Findings</h3>
             <p className="text-sm text-neutral-500">Scan your connected GitHub repository for leaked secrets</p>
           </div>
         </div>
@@ -61,24 +72,24 @@ const SecurityFindingsList = ({ projectId, isEditor }) => {
             <span className="ml-2">{scanning ? 'Scanning...' : 'Scan Now'}</span>
           </Button>
         )}
-      </div>
+      </CardHeader>
 
-      <div className="p-6">
+      <CardBody className="!p-5">
         {!hasFindings ? (
-          <div className="text-center py-8">
-            <Shield className="w-12 h-12 text-green-500 mx-auto mb-3 opacity-20" />
-            <h4 className="text-neutral-900 dark:text-neutral-100 font-medium">No secrets leaked</h4>
-            <p className="text-sm text-neutral-500 mt-1">We haven't detected any exposed secrets in your default branch.</p>
-          </div>
+          <EmptyState
+            icon={<Shield size={24} className="text-success-500" />}
+            title="No secrets leaked"
+            description="We haven't detected any exposed secrets in your default branch."
+          />
         ) : (
           <div className="space-y-4">
             {findings.map(finding => (
-              <div key={finding.id} className={`p-4 rounded-lg border ${finding.confidenceLevel === 'HIGH' ? 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20' : 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20'}`}>
+              <div key={finding.id} className={`p-4 rounded-lg border ${finding.confidenceLevel === 'HIGH' ? 'bg-danger-50 dark:bg-danger-950/30 border-danger-200 dark:border-danger-900' : 'bg-warning-50 dark:bg-warning-950/30 border-warning-200 dark:border-warning-900'}`}>
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${finding.confidenceLevel === 'HIGH' ? 'bg-red-100 text-red-800 dark:bg-red-500/30 dark:text-red-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-500/30 dark:text-amber-300'}`}>
+                    <Badge variant={finding.confidenceLevel === 'HIGH' ? 'danger' : 'warning'}>
                       {finding.confidenceLevel} CONFIDENCE
-                    </span>
+                    </Badge>
                     <span className="text-xs text-neutral-500 font-mono">
                       {finding.matchType.replace('_', ' ')}
                     </span>
@@ -87,7 +98,7 @@ const SecurityFindingsList = ({ projectId, isEditor }) => {
                     <button
                       onClick={() => resolveMutation.mutate(finding.id)}
                       disabled={resolveMutation.isPending}
-                      className="text-xs flex items-center gap-1 text-neutral-500 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                      className="text-xs flex items-center gap-1 text-neutral-500 hover:text-success-600 dark:hover:text-success-400 transition-colors"
                       title="Mark as resolved (false positive or already rotated)"
                     >
                       <Check size={14} /> Resolve
@@ -107,8 +118,8 @@ const SecurityFindingsList = ({ projectId, isEditor }) => {
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 };
 

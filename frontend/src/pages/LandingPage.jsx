@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Shield, Search, Clock, Lock, ArrowRight, Layers, Cpu, FolderOpen } from 'lucide-react'
+import { Shield, Search, Clock, Lock, ArrowRight, Layers, Cpu, FolderOpen, Cloud } from 'lucide-react'
 import Logo from '../components/ui/Logo'
 import Button from '../components/ui/Button'
 
@@ -10,8 +10,15 @@ export default function LandingPage() {
       <nav className="fixed top-0 inset-x-0 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Logo className="w-8 h-8" />
-            <span className="font-semibold text-neutral-900 dark:text-neutral-100 text-lg">Smriti</span>
+            <Logo className="w-9 h-9" />
+            <div className="flex flex-col justify-center mt-1">
+              <span className="text-[17px] font-bold tracking-tight text-neutral-900 dark:text-white leading-none mb-1">
+                Smriti
+              </span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-primary-500/80 dark:text-primary-400/80 leading-none">
+                By Tinexus
+              </span>
+            </div>
           </div>
           
           <div className="hidden md:flex gap-8">
@@ -150,19 +157,21 @@ export default function LandingPage() {
           <p className="text-lg text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 max-w-2xl mx-auto">Smriti replaces scattered spreadsheets and unsearchable chat histories with a secure, intelligent vault.</p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
-            { icon: Layers, title: 'Organized Projects', desc: 'Keep secrets segregated by project and environment for clean access.' },
-            { icon: Search, title: 'AI-Powered Context', desc: 'Search intuitively based on the origin story and usage context of keys.' },
-            { icon: Clock, title: 'Expiry Tracking', desc: 'Get automated nudges before your critical API keys and certificates expire.' },
-            { icon: Shield, title: 'Encrypted Storage', desc: 'Military-grade AES-256 encryption ensures your data remains completely secure.' }
+            { icon: Shield, title: 'Military-Grade Encryption', desc: 'AES-256-GCM encryption ensures your data remains completely secure at rest and in transit.' },
+            { icon: Search, title: 'AI-Powered Context', desc: 'Search intuitively based on the origin story, usage context, and semantic meaning of keys.' },
+            { icon: Cloud, title: 'CI/CD Sync', desc: 'Automatically push and sync secrets to GitHub Actions and Render services seamlessly.' },
+            { icon: Search, title: 'Secret Scanning', desc: 'Pre-commit Git-leak prevention hook ensures you never commit credentials accidentally.' },
+            { icon: Layers, title: 'Role-Based Team Access', desc: 'Collaborate securely with Owner, Editor, and Viewer roles, plus magic link sharing.' },
+            { icon: Clock, title: 'Audit Logs & Expiry', desc: 'Track every team action and get automated nudges before critical API keys expire.' }
           ].map((feat, i) => (
             <div key={i} className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center mb-6">
                 <feat.icon size={24} />
               </div>
               <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">{feat.title}</h3>
-              <p className="text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 leading-relaxed">{feat.desc}</p>
+              <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed">{feat.desc}</p>
             </div>
           ))}
         </div>
@@ -182,7 +191,7 @@ export default function LandingPage() {
             {[
               { step: '01', title: 'Add a Secret', desc: 'Paste your key along with a note about why it was created and who gave it to you.' },
               { step: '02', title: 'AI Organizes It', desc: 'Smriti parses your notes, extracting metadata, tags, and expiry dates automatically.' },
-              { step: '03', title: 'Find Instantly', desc: 'Search for "that Stripe key Tinu gave me last week" and find it immediately.' }
+              { step: '03', title: 'Find Instantly', desc: 'Search for "that Stripe key somebody gave me last week" and find it immediately.' }
             ].map((item, i) => (
               <div key={i} className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-16 h-16 rounded-2xl bg-white dark:bg-neutral-900 border-2 border-primary-100 dark:border-primary-900/30 flex items-center justify-center text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6 shadow-sm">

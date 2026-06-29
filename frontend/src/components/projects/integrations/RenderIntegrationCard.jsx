@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Cloud, Check, Loader2, AlertTriangle, Key, Hash } from 'lucide-react';
 import { renderIntegrationService } from '../../../services/renderIntegrationService';
 import toast from 'react-hot-toast';
+import Button from '../../ui/Button';
+import Modal from '../../ui/Modal';
+import Card, { CardHeader, CardBody } from '../../ui/Card';
+import { Skeleton } from '../../ui/Skeleton';
 
 const RenderIntegrationCard = ({ projectId, role }) => {
   const [status, setStatus] = useState(null);
@@ -16,6 +20,9 @@ const RenderIntegrationCard = ({ projectId, role }) => {
   // Preview Modal State
   const [showPreview, setShowPreview] = useState(false);
   const [previewData, setPreviewData] = useState(null);
+  
+  // Disconnect Confirm State
+  const [showDisconnectConfirm, setShowDisconnectConfirm] = useState(false);
 
   const isEditor = role === 'OWNER' || role === 'EDITOR';
 
@@ -56,12 +63,11 @@ const RenderIntegrationCard = ({ projectId, role }) => {
   };
 
   const handleDisconnect = async () => {
-    if (!confirm('Are you sure you want to disconnect? Existing environment variables on Render will not be deleted.')) return;
-    
     setActionLoading(true);
     try {
       await renderIntegrationService.disconnect(projectId);
       toast.success('Disconnected from Render');
+      setShowDisconnectConfirm(false);
       fetchStatus();
     } catch (error) {
       toast.error('Failed to disconnect');
@@ -99,33 +105,35 @@ const RenderIntegrationCard = ({ projectId, role }) => {
 
   if (loading) {
     return (
-      <div className="card p-6 flex justify-center items-center h-48">
-        <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
-      </div>
+      <Card className="mt-8">
+        <CardBody className="flex justify-center items-center h-48">
+          <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+        </CardBody>
+      </Card>
     );
   }
 
   return (
-    <div className="card overflow-hidden relative">
-      <div className="p-6 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+    <Card className="mt-8">
+      <CardHeader className="flex items-center justify-between !py-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200">
             <Cloud className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Render</h3>
+            <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">Render</h3>
             <p className="text-sm text-neutral-500">Sync secrets to Render service environment variables</p>
           </div>
         </div>
         {status?.connected && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-success-50 dark:bg-success-900/10 text-success-700 dark:text-success-400 border border-success-200 dark:border-success-900/20">
             <Check className="w-3.5 h-3.5" />
             Connected
           </span>
         )}
-      </div>
+      </CardHeader>
 
-      <div className="p-6">
+      <CardBody className="!p-5">
         {!isEditor && (
           <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-500/10 rounded-lg border border-amber-200 dark:border-amber-500/20 flex gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
@@ -137,100 +145,85 @@ const RenderIntegrationCard = ({ projectId, role }) => {
 
         {status?.connected ? (
           <div className="space-y-6">
-            <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-4 border border-neutral-100 dark:border-neutral-800">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Connected Service</p>
-                  <p className="text-sm text-neutral-500 mt-1">{status.serviceName} ({status.serviceId})</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Last Synced</p>
-                  <p className="text-sm text-neutral-500 mt-1">
-                    {status.lastSyncedAt ? new Date(status.lastSyncedAt).toLocaleString() : 'Never'}
-                  </p>
-                </div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-neutral-100 dark:border-neutral-800 gap-4">
+              <div className="break-all">
+                <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                  Connected to {status.serviceName} ({status.serviceId})
+                </p>
+                <p className="text-xs text-neutral-500 mt-0.5">
+                  Last synced: {status.lastSyncedAt ? new Date(status.lastSyncedAt).toLocaleString() : 'Never'}
+                </p>
               </div>
+              
+              {isEditor && (
+                <div className="flex items-center gap-2">
+                  <Button 
+                    size="sm" 
+                    variant="secondary" 
+                    onClick={handlePreviewSync}
+                    loading={previewLoading}
+                    disabled={actionLoading}
+                  >
+                    <Cloud size={14} /> Sync Secrets
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="danger" 
+                    onClick={() => setShowDisconnectConfirm(true)}
+                    disabled={actionLoading}
+                  >
+                    Disconnect
+                  </Button>
+                </div>
+              )}
             </div>
-
-            {isEditor && (
-              <div className="flex gap-3">
-                <button
-                  onClick={handlePreviewSync}
-                  disabled={previewLoading || actionLoading}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {previewLoading ? (
-                    <><Loader2 className="w-4 h-4 animate-spin" /> Preparing Sync...</>
-                  ) : (
-                    <><Cloud className="w-4 h-4" /> Sync Secrets</>
-                  )}
-                </button>
-                <button
-                  onClick={handleDisconnect}
-                  disabled={actionLoading}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                >
-                  Disconnect
-                </button>
-              </div>
-            )}
           </div>
         ) : (
           <form onSubmit={handleConnect} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Render Service ID
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Hash className="h-5 w-5 text-neutral-400" />
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Render Service ID
+                </label>
                 <input
                   type="text"
                   value={serviceId}
                   onChange={(e) => setServiceId(e.target.value)}
                   disabled={!isEditor || actionLoading}
-                  className="input-base pl-10 block w-full py-2"
+                  className="input-base block w-full"
                   placeholder="srv-cxxxxxxxxxxxxxxxxxx"
                   required
                 />
+                <p className="mt-1.5 text-xs text-neutral-500">Find this in your Render dashboard URL: render.com/web/srv-...</p>
               </div>
-              <p className="mt-1 text-xs text-neutral-500">Find this in your Render dashboard URL: render.com/web/srv-...</p>
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Render API Key
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Key className="h-5 w-5 text-neutral-400" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Render API Key
+                </label>
                 <input
                   type="password"
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                   disabled={!isEditor || actionLoading}
-                  className="input-base pl-10 block w-full py-2"
+                  className="input-base block w-full"
                   placeholder="rnd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                   required
                 />
+                <p className="mt-1.5 text-xs text-neutral-500">Generate an API key in your Render Account Settings</p>
               </div>
-              <p className="mt-1 text-xs text-neutral-500">Generate an API key in your Render Account Settings</p>
             </div>
 
             {isEditor && (
-              <button
-                type="submit"
-                disabled={actionLoading || !serviceId || !apiKey}
-                className="w-full flex justify-center py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-              >
-                {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Connect Render'}
-              </button>
+              <div className="pt-2">
+                <Button type="submit" loading={actionLoading} disabled={!serviceId || !apiKey}>
+                  Connect Render
+                </Button>
+              </div>
             )}
           </form>
         )}
-      </div>
+      </CardBody>
 
       {/* Preview Modal */}
       {showPreview && previewData && (
@@ -247,13 +240,13 @@ const RenderIntegrationCard = ({ projectId, role }) => {
                 <p>Render replaces all environment variables on sync. Smriti will safely merge your secrets with the existing variables on Render.</p>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                 <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 border border-neutral-100 dark:border-neutral-800">
-                  <span className="block text-2xl font-bold text-green-600 dark:text-green-500">{previewData.newCount}</span>
+                  <span className="block text-2xl font-bold text-success-600 dark:text-success-500">{previewData.newCount}</span>
                   <span className="text-xs font-medium text-neutral-500 uppercase">New</span>
                 </div>
                 <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 border border-neutral-100 dark:border-neutral-800">
-                  <span className="block text-2xl font-bold text-blue-600 dark:text-blue-500">{previewData.updatedCount}</span>
+                  <span className="block text-2xl font-bold text-primary-600 dark:text-primary-500">{previewData.updatedCount}</span>
                   <span className="text-xs font-medium text-neutral-500 uppercase">Updated</span>
                 </div>
                 <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 border border-neutral-100 dark:border-neutral-800">
@@ -265,17 +258,17 @@ const RenderIntegrationCard = ({ projectId, role }) => {
               <div className="max-h-40 overflow-y-auto border border-neutral-100 dark:border-neutral-800 rounded-lg text-sm bg-neutral-50 dark:bg-neutral-800/50 p-2">
                 {previewData.newKeys.length > 0 && (
                   <div className="mb-2">
-                    <span className="text-xs font-semibold text-green-600 dark:text-green-500 uppercase px-1">Will be added:</span>
+                    <span className="text-xs font-semibold text-success-600 dark:text-success-500 uppercase px-1">Will be added:</span>
                     <div className="flex flex-wrap gap-1 mt-1 px-1">
-                      {previewData.newKeys.map(k => <span key={k} className="bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300 text-xs px-2 py-0.5 rounded">{k}</span>)}
+                      {previewData.newKeys.map(k => <span key={k} className="bg-success-100 dark:bg-success-900/20 text-success-800 dark:text-success-300 text-xs px-2 py-0.5 rounded">{k}</span>)}
                     </div>
                   </div>
                 )}
                 {previewData.updatedKeys.length > 0 && (
                   <div className="mb-2">
-                    <span className="text-xs font-semibold text-blue-600 dark:text-blue-500 uppercase px-1">Will be updated:</span>
+                    <span className="text-xs font-semibold text-primary-600 dark:text-primary-500 uppercase px-1">Will be updated:</span>
                     <div className="flex flex-wrap gap-1 mt-1 px-1">
-                      {previewData.updatedKeys.map(k => <span key={k} className="bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 text-xs px-2 py-0.5 rounded">{k}</span>)}
+                      {previewData.updatedKeys.map(k => <span key={k} className="bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-xs px-2 py-0.5 rounded">{k}</span>)}
                     </div>
                   </div>
                 )}
@@ -291,25 +284,51 @@ const RenderIntegrationCard = ({ projectId, role }) => {
             </div>
 
             <div className="p-4 border-t border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 flex justify-end gap-3">
-              <button
+              <Button
+                variant="secondary"
                 onClick={() => setShowPreview(false)}
                 disabled={actionLoading}
-                className="px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleConfirmSync}
-                disabled={actionLoading}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors flex items-center gap-2"
+                loading={actionLoading}
               >
-                {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirm & Push'}
-              </button>
+                Confirm & Push
+              </Button>
             </div>
           </div>
         </div>
       )}
-    </div>
+      {/* Disconnect Modal */}
+      <Modal
+        open={showDisconnectConfirm}
+        onClose={() => setShowDisconnectConfirm(false)}
+        title="Disconnect Render"
+        size="sm"
+      >
+        <div className="p-6 space-y-6">
+          <p className="text-sm text-neutral-600 dark:text-neutral-300">
+            Are you sure you want to disconnect <strong>{status?.serviceName}</strong>?
+            <br /><br />
+            Secrets will no longer be synced to this service, but existing environment variables on Render will not be deleted.
+          </p>
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setShowDisconnectConfirm(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              loading={actionLoading}
+              onClick={handleDisconnect}
+            >
+              Disconnect
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </Card>
   );
 };
 

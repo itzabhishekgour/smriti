@@ -10,7 +10,7 @@ export default function SettingsPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-1">Settings</h1>
-      <p className="text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 mb-8">Manage your account and preferences</p>
+      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-8">Manage your account and preferences</p>
 
       {/* Profile */}
       <div className="card mb-6">
@@ -24,22 +24,22 @@ export default function SettingsPage() {
             </div>
             <div>
               <p className="font-semibold text-neutral-900 dark:text-neutral-100">{user?.name}</p>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500">{user?.email}</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">{user?.email}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div className="flex items-start gap-3">
-              <User size={15} className="text-neutral-400 dark:text-neutral-500 mt-0.5" />
+              <User size={15} className="text-neutral-400 mt-0.5" />
               <div>
-                <p className="text-xs text-neutral-400 dark:text-neutral-500">Name</p>
+                <p className="text-xs text-neutral-400">Name</p>
                 <p className="text-sm text-neutral-800 dark:text-neutral-200">{user?.name}</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Mail size={15} className="text-neutral-400 dark:text-neutral-500 mt-0.5" />
+              <Mail size={15} className="text-neutral-400 mt-0.5" />
               <div>
-                <p className="text-xs text-neutral-400 dark:text-neutral-500">Email</p>
+                <p className="text-xs text-neutral-400">Email</p>
                 <p className="text-sm text-neutral-800 dark:text-neutral-200">{user?.email}</p>
               </div>
             </div>
@@ -56,7 +56,7 @@ export default function SettingsPage() {
           <div className="flex flex-col sm:flex-row gap-6">
             <div className="flex-1">
               <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">Theme Preference</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 mb-4 mt-1">Choose how Smriti looks to you. System mode follows your OS preference.</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4 mt-1">Choose how Smriti looks to you. System mode follows your OS preference.</p>
               
               <div className="inline-flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 {['light', 'dark', 'system'].map((t) => (
@@ -66,7 +66,7 @@ export default function SettingsPage() {
                     className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all ${
                       theme === t 
                         ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm border border-neutral-200 dark:border-neutral-600' 
-                        : 'text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:text-neutral-300 dark:hover:text-neutral-300 border border-transparent'
+                        : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 border border-transparent'
                     }`}
                   >
                     {t === 'light' ? <Sun size={14} /> : t === 'dark' ? <Moon size={14} /> : <Monitor size={14} />}
@@ -88,6 +88,8 @@ export default function SettingsPage() {
           {[
             ['Encryption', 'AES-256-GCM — all secret values encrypted at rest'],
             ['Authentication', 'JWT — 24-hour expiry, stateless sessions'],
+            ['Secret Scanning', 'Pre-commit hook to prevent credential leaks in Git'],
+            ['Audit Logging', 'Immutable tracking of all read/write/delete actions'],
             ['Clipboard', 'Auto-clears after 15 seconds when you copy a secret'],
           ].map(([title, desc]) => (
             <div key={title} className="flex items-start gap-3">
@@ -96,7 +98,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{title}</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 dark:text-neutral-500">{desc}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{desc}</p>
               </div>
             </div>
           ))}
@@ -129,9 +131,9 @@ export default function SettingsPage() {
       <div className="card">
         <div className="px-6 py-4">
           <p className="text-xs text-neutral-400 dark:text-neutral-500 text-center">
-            Smriti v1.0 · Built by{' '}
-            <span className="font-medium text-neutral-600 dark:text-neutral-400 dark:text-neutral-500">Tinu</span>{' '}
-            · A Tinexus Technology
+            Smriti v1.0 · A{' '}
+            <span className="font-semibold text-neutral-600 dark:text-neutral-300 tracking-wide uppercase text-[10px]">Tinexus</span>{' '}
+            Technology
           </p>
         </div>
       </div>

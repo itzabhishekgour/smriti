@@ -4,6 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 import { auditLogService } from '../../services/auditLogService'
 import { Activity, Clock, Eye, Download, Shield, Plus, Edit2, Trash2, Link as LinkIcon, RefreshCw } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import Card, { CardHeader, CardBody } from '../ui/Card'
+import EmptyState from '../ui/EmptyState'
+import { Skeleton } from '../ui/Skeleton'
 
 const getActionIcon = (action) => {
   switch (action) {
@@ -57,13 +60,23 @@ export default function AuditLogList({ projectId, isOwner }) {
     queryFn: () => auditLogService.getLogs(projectId, { includeViews })
   })
 
-  if (isLoading) return <div className="text-sm text-neutral-500 dark:text-neutral-400 p-4">Loading activity...</div>
+  if (isLoading) {
+    return (
+      <Card className="mt-8">
+        <CardBody className="space-y-6">
+          <div className="flex gap-4 items-center"><Skeleton className="w-8 h-8 rounded-full flex-shrink-0" /><div className="space-y-2 flex-1"><Skeleton className="h-4 w-3/4" /><Skeleton className="h-3 w-1/4" /></div></div>
+          <div className="flex gap-4 items-center"><Skeleton className="w-8 h-8 rounded-full flex-shrink-0" /><div className="space-y-2 flex-1"><Skeleton className="h-4 w-1/2" /><Skeleton className="h-3 w-1/4" /></div></div>
+          <div className="flex gap-4 items-center"><Skeleton className="w-8 h-8 rounded-full flex-shrink-0" /><div className="space-y-2 flex-1"><Skeleton className="h-4 w-2/3" /><Skeleton className="h-3 w-1/4" /></div></div>
+        </CardBody>
+      </Card>
+    )
+  }
 
   const logs = data?.content || []
 
   return (
-    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden mt-8">
-      <div className="px-5 py-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+    <Card className="mt-8">
+      <CardHeader className="flex items-center justify-between !py-4">
         <div>
           <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
             <Activity size={16} className="text-primary-500" />
@@ -83,13 +96,15 @@ export default function AuditLogList({ projectId, isOwner }) {
           />
           <span className="text-neutral-600 dark:text-neutral-300">Show all activity (including views)</span>
         </label>
-      </div>
+      </CardHeader>
 
-      <div className="p-5">
+      <CardBody className="!p-5">
         {logs.length === 0 ? (
-          <div className="text-center py-8 text-neutral-500 dark:text-neutral-400 text-sm">
-            No activity found.
-          </div>
+          <EmptyState
+            icon={<Activity size={24} />}
+            title="No activity yet"
+            description="No matching activity events found in this project."
+          />
         ) : (
           <div className="relative border-l border-neutral-200 dark:border-neutral-800 ml-3 space-y-6">
             {logs.map((log) => (
@@ -110,7 +125,7 @@ export default function AuditLogList({ projectId, isOwner }) {
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   )
 }

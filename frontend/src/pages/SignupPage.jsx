@@ -47,10 +47,14 @@ export default function SignupPage() {
       {/* Left panel */}
       <div className="hidden lg:flex flex-col justify-between w-1/2 bg-primary-950 p-12">
         <div className="flex items-center gap-2.5">
-          <Logo className="w-9 h-9" />
-          <div>
-            <span className="text-white font-semibold text-base">Smriti</span>
-            <span className="block text-primary-400 text-xs">by Tinexus</span>
+          <Logo className="w-10 h-10" />
+          <div className="flex flex-col justify-center">
+            <span className="text-[17px] font-bold tracking-tight text-white leading-none mb-1.5">
+              Smriti
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-primary-400/90 leading-none">
+              By Tinexus
+            </span>
           </div>
         </div>
         <div>
@@ -61,7 +65,22 @@ export default function SignupPage() {
             Store the context, origin story, and memory behind every key. AI-powered search so you never lose track.
           </p>
         </div>
-        <p className="text-primary-500 text-xs">A Tinexus Technology</p>
+
+        <div className="grid grid-cols-2 gap-y-6 gap-x-8">
+          {[
+            ['AES-256', 'Military-grade encryption'],
+            ['Secret Scanning', 'Pre-commit Git-leak prevention'],
+            ['CI/CD Sync', 'Push to GitHub & Render'],
+            ['Audit Logs', 'Track every team action'],
+            ['Team Access', 'Role-based collaboration'],
+            ['AI Context', 'Smart semantic search'],
+          ].map(([label, sub]) => (
+            <div key={label}>
+              <div className="text-white font-semibold text-sm">{label}</div>
+              <div className="text-primary-400 text-xs">{sub}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Form */}
@@ -73,7 +92,7 @@ export default function SignupPage() {
           </div>
 
           <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-200 mb-1">Create account</h1>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 mb-8">Start managing your secrets with context</p>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-8">Start managing your secrets with context</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name */}
@@ -119,9 +138,9 @@ export default function SignupPage() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500">
+          <p className="mt-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
             Already have an account?{' '}
-            <Link to="/login" className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:text-primary-300">Sign in</Link>
+            <Link to="/login" className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">Sign in</Link>
           </p>
         </div>
       </div>

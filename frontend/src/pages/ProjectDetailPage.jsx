@@ -31,6 +31,7 @@ export default function ProjectDetailPage() {
   const [exporting, setExporting] = useState(false)
   const [shareModal, setShareModal] = useState(false)
   const [linkModal, setLinkModal] = useState(false)
+  const [activeTab, setActiveTab] = useState('secrets')
 
   const handleExportEnv = async () => {
     try {
@@ -115,7 +116,7 @@ export default function ProjectDetailPage() {
       {/* Back */}
       <button
         onClick={() => navigate('/dashboard')}
-        className="flex items-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 hover:text-neutral-800 dark:text-neutral-200 mb-6 transition-colors group"
+        className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 mb-6 transition-colors group"
       >
         <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform" />
         Back to Dashboard
@@ -139,89 +140,112 @@ export default function ProjectDetailPage() {
             <div>
               <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{project.name}</h1>
               {project.description && (
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500">{project.description}</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">{project.description}</p>
               )}
             </div>
           </div>
-          <div className="flex items-center gap-3 text-xs text-neutral-400 dark:text-neutral-500 ml-13 pl-1">
+          <div className="flex items-center gap-3 text-xs text-neutral-400 ml-13 pl-1">
             <span>{project.secretCount} {project.secretCount === 1 ? 'secret' : 'secrets'}</span>
           </div>
         </div>
       ) : null}
 
-      {/* Toolbar */}
-      <div className="flex items-center gap-3 mb-5 flex-wrap">
-        <div className="relative flex-1 min-w-0 max-w-xs">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500" />
-          <input
-            className="input-base pl-9 h-9 w-full text-sm"
-            placeholder="Search secrets…"
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+      {/* Tabs */}
+      <div className="flex items-center gap-6 border-b border-neutral-200 dark:border-neutral-800 mb-6">
+        <button
+          onClick={() => setActiveTab('secrets')}
+          className={`pb-3 text-sm font-medium border-b-2 transition-colors ${activeTab === 'secrets' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200'}`}
+        >
+          Secrets
+        </button>
+        <button
+          onClick={() => setActiveTab('integrations')}
+          className={`pb-3 text-sm font-medium border-b-2 transition-colors ${activeTab === 'integrations' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200'}`}
+        >
+          Integrations & Security
+        </button>
+        <button
+          onClick={() => setActiveTab('activity')}
+          className={`pb-3 text-sm font-medium border-b-2 transition-colors ${activeTab === 'activity' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200'}`}
+        >
+          Activity
+        </button>
+      </div>
+
+      {activeTab === 'secrets' && (
+        <div className="space-y-4 animate-fade-in">
+          {/* Toolbar */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="relative flex-1 min-w-0 max-w-xs">
+              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+              <input
+                className="input-base pl-9 h-9 w-full text-sm"
+                placeholder="Search secrets…"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              {project?.isOwner && (
+                <>
+                  <Button size="sm" variant="secondary" onClick={() => setShareModal(true)}>
+                    <Users size={15} /> Team
+                  </Button>
+                  <Button size="sm" variant="secondary" onClick={() => setLinkModal(true)}>
+                    <LinkIcon size={15} /> Link
+                  </Button>
+                </>
+              )}
+              <Button size="sm" variant="secondary" onClick={handleExportEnv} loading={exporting}>
+                <Download size={15} /> Export
+              </Button>
+              {(project?.isOwner || project?.userRole === 'EDITOR') && (
+                <Button size="sm" onClick={() => setSecretModal({ open: true, data: null })}>
+                  <Plus size={15} /> Add Secret
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <SecretList
+            secrets={secrets}
+            loading={secLoading}
+            projectId={projectId}
+            canEdit={project?.isOwner || project?.userRole === 'EDITOR'}
+            onNew={() => setSecretModal({ open: true, data: null })}
+            onEdit={(s) => setSecretModal({ open: true, data: s })}
+            onDelete={(s) => setDeleteConfirm({ open: true, data: s })}
+            emptyMessage={
+              debouncedQuery
+                ? `No secrets match "${debouncedQuery}"`
+                : 'No secrets in this project yet. Add your first one!'
+            }
           />
         </div>
-        <div className="flex items-center gap-2">
-          {project?.isOwner && (
-            <>
-              <Button size="sm" variant="secondary" onClick={() => setShareModal(true)}>
-                <Users size={15} /> Team
-              </Button>
-              <Button size="sm" variant="secondary" onClick={() => setLinkModal(true)}>
-                <LinkIcon size={15} /> Link
-              </Button>
-            </>
-          )}
-          <Button size="sm" variant="secondary" onClick={handleExportEnv} loading={exporting}>
-            <Download size={15} /> Export
-          </Button>
-          {(project?.isOwner || project?.userRole === 'EDITOR') && (
-            <Button size="sm" onClick={() => setSecretModal({ open: true, data: null })}>
-              <Plus size={15} /> Add Secret
-            </Button>
-          )}
+      )}
+
+      {activeTab === 'integrations' && (
+        <div className="space-y-8 animate-fade-in">
+          <GitHubIntegrationCard 
+            projectId={projectId} 
+            canEdit={project?.isOwner || project?.userRole === 'EDITOR'} 
+          />
+          <RenderIntegrationCard 
+            projectId={projectId} 
+            role={project?.userRole || (project?.isOwner ? 'OWNER' : 'VIEWER')} 
+          />
+          <SecurityFindingsList 
+            projectId={projectId} 
+            isEditor={project?.isOwner || project?.userRole === 'EDITOR'} 
+          />
         </div>
-      </div>
+      )}
 
-      {/* Secrets */}
-      <SecretList
-        secrets={secrets}
-        loading={secLoading}
-        projectId={projectId}
-        canEdit={project?.isOwner || project?.userRole === 'EDITOR'}
-        onNew={() => setSecretModal({ open: true, data: null })}
-        onEdit={(s) => setSecretModal({ open: true, data: s })}
-        onDelete={(s) => setDeleteConfirm({ open: true, data: s })}
-        emptyMessage={
-          debouncedQuery
-            ? `No secrets match "${debouncedQuery}"`
-            : 'No secrets in this project yet. Add your first one!'
-        }
-      />
-
-      {/* Integrations */}
-      <div className="mt-8 space-y-4">
-        <GitHubIntegrationCard 
-          projectId={projectId} 
-          canEdit={project?.isOwner || project?.userRole === 'EDITOR'} 
-        />
-        <RenderIntegrationCard 
-          projectId={projectId} 
-          role={project?.userRole || (project?.isOwner ? 'OWNER' : 'VIEWER')} 
-        />
-      </div>
-
-      {/* Security Findings */}
-      <div className="mt-8">
-        <SecurityFindingsList 
-          projectId={projectId} 
-          isEditor={project?.isOwner || project?.userRole === 'EDITOR'} 
-        />
-      </div>
-
-      {/* Audit Logs */}
-      <div className="mt-8">
-        <AuditLogList projectId={projectId} isOwner={project?.isOwner} />
-      </div>
+      {activeTab === 'activity' && (
+        <div className="animate-fade-in">
+          <AuditLogList projectId={projectId} isOwner={project?.isOwner} />
+        </div>
+      )}
 
       {/* Secret Form */}
       <SecretForm

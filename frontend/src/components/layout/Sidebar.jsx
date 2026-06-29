@@ -26,9 +26,13 @@ export default function Sidebar() {
       {/* Brand */}
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-neutral-100 dark:border-neutral-800">
         <Logo className="w-8 h-8" />
-        <div>
-          <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Smriti</span>
-          <span className="block text-[10px] text-neutral-400 dark:text-neutral-500 leading-none">by Tinexus</span>
+        <div className="flex flex-col justify-center">
+          <span className="text-[15px] font-bold tracking-tight text-neutral-900 dark:text-white leading-none mb-1">
+            Smriti
+          </span>
+          <span className="text-[9px] font-medium uppercase tracking-[0.15em] text-primary-500/80 dark:text-primary-400/80 leading-none">
+            By Tinexus
+          </span>
         </div>
       </div>
 
@@ -61,7 +65,7 @@ export default function Sidebar() {
         </div>
         <button
           onClick={handleLogout}
-          className="w-full nav-item text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 hover:text-danger-600 dark:text-danger-400 hover:bg-danger-50 dark:bg-danger-900/30 dark:hover:bg-danger-900/30 dark:hover:text-danger-400"
+          className="w-full nav-item text-neutral-500 dark:text-neutral-400 hover:text-danger-600 dark:hover:text-danger-400 hover:bg-danger-50 dark:hover:bg-danger-900/30"
         >
           <LogOut size={16} />
           <span>Log out</span>
