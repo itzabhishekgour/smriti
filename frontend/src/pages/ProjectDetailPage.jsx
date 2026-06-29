@@ -15,6 +15,7 @@ import toast from 'react-hot-toast'
 import ShareModal from '../components/projects/ShareModal'
 import LinkShareModal from '../components/projects/LinkShareModal'
 import AuditLogList from '../components/projects/AuditLogList'
+import GitHubIntegrationCard from '../components/projects/integrations/GitHubIntegrationCard'
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams()
@@ -194,6 +195,14 @@ export default function ProjectDetailPage() {
             : 'No secrets in this project yet. Add your first one!'
         }
       />
+
+      {/* Integrations */}
+      <div className="mt-8">
+        <GitHubIntegrationCard 
+          projectId={projectId} 
+          canEdit={project?.isOwner || project?.userRole === 'EDITOR'} 
+        />
+      </div>
 
       {/* Audit Logs */}
       <div className="mt-8">
