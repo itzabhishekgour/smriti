@@ -40,6 +40,11 @@ All features below have been manually verified end-to-end with real data.
 - ✅ **Rich Metadata:** Track origin notes, tags, environments, and expiry dates.
 - ✅ **Version History:** Non-destructive historical timelines for every secret. Rollback to older versions with one click while archiving the current state.
 
+### Knowledge Base (Global Notes)
+- ✅ **Rich Text Editing:** Integrated TipTap editor for seamless documentation.
+- ✅ **Debounced Auto-Save:** Write without interruption; changes save silently in the background.
+- ✅ **Instant Search:** Real-time filtering to find knowledge and guides instantly.
+
 ### Authentication & Account Management
 - ✅ **OAuth Integration:** Secure "Login with GitHub" flow allowing users to sign up and authenticate effortlessly.
 - ✅ **Account Linking:** Existing users can link their GitHub accounts to their Tinexus profiles from the newly designed Settings page.
