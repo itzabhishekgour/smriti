@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Shield, Search, Clock, Lock, ArrowRight, Layers, Cpu, FolderOpen, Cloud } from 'lucide-react'
 import Logo from '../components/ui/Logo'
 import Button from '../components/ui/Button'
+import { APP_AUTHOR } from '../config/version'
 
 export default function LandingPage() {
   return (
@@ -16,7 +17,7 @@ export default function LandingPage() {
                 Smriti
               </span>
               <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-primary-500/80 dark:text-primary-400/80 leading-none">
-                By Tinexus
+                By {APP_AUTHOR}
               </span>
             </div>
           </div>
@@ -262,18 +263,58 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      {/* 8. Footer */}
-      <footer className="bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-5 md:flex-row md:justify-between">
-          <div className="flex items-center gap-3">
-            <Logo className="w-6 h-6 grayscale opacity-60" />
-            <span className="text-neutral-500 dark:text-neutral-400 font-medium">Smriti</span>
+      {/* 8. Professional Footer */}
+      <footer className="bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 pt-16 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12 mb-16">
+            <div className="col-span-2 lg:col-span-2">
+              <div className="flex items-center gap-2.5 mb-5">
+                <Logo className="w-8 h-8" />
+                <span className="text-[17px] font-bold tracking-tight text-neutral-900 dark:text-white leading-none">
+                  Smriti
+                </span>
+              </div>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm mb-6">
+                Never lose the context of your secrets again. 
+                Secure, AI-powered secret management built for modern developer workflows.
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">Product</h3>
+              <ul className="space-y-3">
+                <li><a href="#features" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Features</a></li>
+                <li><a href="#security" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Security</a></li>
+                <li><a href="https://github.com/itzabhishekgour/smriti/blob/alpha/CHANGELOG.md" target="_blank" rel="noreferrer" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Changelog</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">Resources</h3>
+              <ul className="space-y-3">
+                <li><a href="https://github.com/itzabhishekgour/smriti/blob/alpha/README.md" target="_blank" rel="noreferrer" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Documentation</a></li>
+                <li><a href="https://github.com/Tinexus-HQ" target="_blank" rel="noreferrer" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Community</a></li>
+                <li><a href="https://abhishek-gour.vercel.app/contact" target="_blank" rel="noreferrer" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Support</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">Legal</h3>
+              <ul className="space-y-3">
+                <li><Link to="/privacy" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors">Terms of Service</Link></li>
+              </ul>
+            </div>
           </div>
-          <p className="text-sm text-neutral-400 dark:text-neutral-500 text-center">© {new Date().getFullYear()} Tinexus. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link to="/privacy" className="text-sm text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200">Privacy</Link>
-            <Link to="/terms" className="text-sm text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200">Terms</Link>
-            <a href="mailto:mrasgour1004@gmail.com" className="text-sm text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200">Contact</a>
+          
+          <div className="pt-8 border-t border-neutral-200 dark:border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center md:text-left">
+              © {new Date().getFullYear()} {APP_AUTHOR}. All rights reserved.
+            </p>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50">
+              <div className="w-2 h-2 rounded-full bg-success-500 animate-pulse"></div>
+              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">All systems operational on beta testing</span>
+            </div>
           </div>
         </div>
       </footer>

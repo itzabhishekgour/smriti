@@ -6,6 +6,7 @@ import { authService } from '../services/authService'
 import Button from '../components/ui/Button'
 import Logo from '../components/ui/Logo'
 import toast from 'react-hot-toast'
+import { APP_AUTHOR } from '../config/version'
 
 export default function SignupPage() {
   const { login } = useAuth()
@@ -55,7 +56,7 @@ export default function SignupPage() {
               Smriti
             </span>
             <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-primary-400/90 leading-none">
-              By Tinexus
+              By {APP_AUTHOR}
             </span>
           </div>
         </div>

@@ -49,7 +49,7 @@ export default function TermsPage() {
 
             <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">5. Contact Us</h2>
             <p>
-              If you have any questions about these Terms, please contact us at legal@tinexus.com.
+              If you have any questions about these Terms, please contact us at mrasgour1004@gmail.com.
             </p>
           </div>
         </div>
