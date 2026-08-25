@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
+import ProjectsPage from './pages/ProjectsPage'
 import ProjectDetailPage from './pages/ProjectDetailPage'
 import SecretDetailPage from './pages/SecretDetailPage'
 import SettingsPage from './pages/SettingsPage'
@@ -14,6 +15,7 @@ import PublicSharePage from './pages/PublicSharePage'
 import OAuthCallbackPage from './pages/OAuthCallbackPage'
 import AcceptTermsPage from './pages/AcceptTermsPage'
 import LinkAccountPage from './pages/LinkAccountPage'
+import NotesPage from './pages/NotesPage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -46,9 +48,10 @@ export default function App() {
       {/* Protected */}
       <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/projects" element={<DashboardPage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
         <Route path="/projects/:projectId/secrets/:secretId" element={<SecretDetailPage />} />
+        <Route path="/notes" element={<NotesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
