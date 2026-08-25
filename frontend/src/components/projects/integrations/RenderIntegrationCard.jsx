@@ -115,9 +115,9 @@ const RenderIntegrationCard = ({ projectId, role }) => {
 
   return (
     <Card className="mt-8">
-      <CardHeader className="flex items-center justify-between !py-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between !py-4 gap-4">
+        <div className="flex items-start sm:items-center gap-3">
+          <div className="w-10 h-10 shrink-0 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200 mt-0.5 sm:mt-0">
             <Cloud className="w-5 h-5" />
           </div>
           <div>
@@ -126,7 +126,7 @@ const RenderIntegrationCard = ({ projectId, role }) => {
           </div>
         </div>
         {status?.connected && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-success-50 dark:bg-success-900/10 text-success-700 dark:text-success-400 border border-success-200 dark:border-success-900/20">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-success-50 dark:bg-success-900/10 text-success-700 dark:text-success-400 border border-success-200 dark:border-success-900/20 shrink-0">
             <Check className="w-3.5 h-3.5" />
             Connected
           </span>

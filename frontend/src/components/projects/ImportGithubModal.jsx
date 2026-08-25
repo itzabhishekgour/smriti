@@ -66,6 +66,20 @@ export default function ImportGithubModal({ open, onClose }) {
   return (
     <Modal open={open} onClose={onClose} title="Import from GitHub" size="md">
       <div className="p-6">
+
+        {/* What this actually does */}
+        <div className="mb-5 flex gap-3 bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800/50 rounded-xl p-4">
+          <div className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-primary-100 dark:bg-primary-800 flex items-center justify-center">
+            <span className="text-primary-600 dark:text-primary-400 text-xs font-bold">i</span>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-primary-800 dark:text-primary-300">This does not import secrets or .env files</p>
+            <p className="text-xs text-primary-600 dark:text-primary-400 mt-0.5 leading-relaxed">
+              Selecting a repo creates a new <strong>linked project</strong> in Smriti with the same name. You can then manually add secrets to it and push them to GitHub Actions environments, or pull existing Actions secrets into it.
+            </p>
+          </div>
+        </div>
+
         <div className="mb-4 relative">
           <Search className="absolute left-3 top-2.5 text-neutral-400" size={18} />
           <input
@@ -117,7 +131,7 @@ export default function ImportGithubModal({ open, onClose }) {
                       disabled={importMutation.isPending}
                       onClick={() => handleImport(repo)}
                     >
-                      Import
+                      Link as Project
                     </Button>
                   </div>
                 ))}

@@ -55,9 +55,9 @@ const SecurityFindingsList = ({ projectId, isEditor }) => {
 
   return (
     <Card className="mt-8">
-      <CardHeader className="flex items-center justify-between bg-neutral-50 dark:bg-neutral-800/20 !py-4">
-        <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${hasFindings ? 'bg-danger-100 dark:bg-danger-900/30 text-danger-600 dark:text-danger-400' : 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'}`}>
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-neutral-50 dark:bg-neutral-800/20 !py-4 gap-4">
+        <div className="flex items-start sm:items-center gap-3">
+          <div className={`w-10 h-10 shrink-0 rounded-xl flex items-center justify-center mt-0.5 sm:mt-0 ${hasFindings ? 'bg-danger-100 dark:bg-danger-900/30 text-danger-600 dark:text-danger-400' : 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'}`}>
             {hasFindings ? <ShieldAlert size={20} /> : <Shield size={20} />}
           </div>
           <div>
@@ -67,7 +67,7 @@ const SecurityFindingsList = ({ projectId, isEditor }) => {
         </div>
         
         {isEditor && (
-          <Button onClick={handleScan} disabled={scanning} size="sm" variant="secondary">
+          <Button onClick={handleScan} disabled={scanning} size="sm" variant="secondary" className="w-full sm:w-auto justify-center">
             {scanning ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
             <span className="ml-2">{scanning ? 'Scanning...' : 'Scan Now'}</span>
           </Button>

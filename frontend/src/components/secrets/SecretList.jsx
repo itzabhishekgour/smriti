@@ -12,7 +12,7 @@ export default function SecretList({ secrets, loading, projectId, canEdit = true
       <EmptyState
         icon={<Key size={20} />}
         title="No secrets here"
-        description={emptyMessage || 'Add your first secret — API key, token, or credential — with full context.'}
+        description={emptyMessage || 'Add your first secret: API key, token, or credential, with full context.'}
         action={onNew && <Button onClick={onNew} size="sm">Add Secret</Button>}
       />
     )

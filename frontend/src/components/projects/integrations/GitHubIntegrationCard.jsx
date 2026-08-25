@@ -104,15 +104,15 @@ export default function GitHubIntegrationCard({ projectId, canEdit }) {
       <CardBody className="!p-5">
       {!isConnected ? (
         <div className="space-y-4">
-          <div className="flex border-b border-neutral-200 dark:border-neutral-800 mb-4">
+          <div className="flex overflow-x-auto no-scrollbar border-b border-neutral-200 dark:border-neutral-800 mb-4">
             <button
-              className={`pb-2 px-4 text-sm font-medium transition-colors border-b-2 ${activeTab === 'oauth' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
+              className={`pb-2 px-4 whitespace-nowrap text-sm font-medium transition-colors border-b-2 ${activeTab === 'oauth' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
               onClick={() => setActiveTab('oauth')}
             >
               Connected Account
             </button>
             <button
-              className={`pb-2 px-4 text-sm font-medium transition-colors border-b-2 ${activeTab === 'manual' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
+              className={`pb-2 px-4 whitespace-nowrap text-sm font-medium transition-colors border-b-2 ${activeTab === 'manual' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
               onClick={() => setActiveTab('manual')}
             >
               Manual PAT (Backup)

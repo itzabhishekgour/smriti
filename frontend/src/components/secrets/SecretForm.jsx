@@ -197,12 +197,12 @@ export default function SecretForm({ open, onClose, onSubmit, initialData, loadi
 
         {/* Origin Note */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Origin Story</label>
+          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Background Note</label>
           <div className="relative">
             <textarea
               className="input-base resize-none pr-10"
               rows={3}
-              placeholder="How did you get this key? e.g. 'Got from Stripe dashboard on Jan 3 for the checkout feature. Found under Developers > API Keys.'"
+              placeholder="How did you get this key? e.g. 'DB URL for Project-abc. Logged in using my personal Chrome profile (xyz@gmail.com).'"
               value={form.originNote}
               onChange={set('originNote')}
               onBlur={handleOriginNoteBlur}
@@ -214,7 +214,7 @@ export default function SecretForm({ open, onClose, onSubmit, initialData, loadi
               </span>
             )}
           </div>
-          <p className="text-xs text-neutral-400 dark:text-neutral-500">Write in plain language — this is your memory, not a form field.</p>
+          <p className="text-xs text-neutral-400 dark:text-neutral-500">Write in plain language. This is your memory, not a form field.</p>
         </div>
 
         {/* Row 3: Source URL + Expiry */}
@@ -224,7 +224,7 @@ export default function SecretForm({ open, onClose, onSubmit, initialData, loadi
             <input
               type="url"
               className="input-base"
-              placeholder="https://dashboard.stripe.com/..."
+              placeholder="e.g. https://dashboard.stripe.com/apikeys (Shortcut for rotating later)"
               value={form.sourceUrl}
               onChange={set('sourceUrl')}
             />

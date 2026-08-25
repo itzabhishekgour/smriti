@@ -62,7 +62,7 @@ export default function LoginPage() {
             "Never lose the context of your secrets again."
           </blockquote>
           <p className="mt-4 text-primary-300 text-sm leading-relaxed max-w-sm">
-            Store your API keys with full context — where you got them, why, and when they expire. Never lose the story behind a secret again.
+            Store your API keys with full context: where you got them, why, and when they expire. Never lose the story behind a secret again.
           </p>
         </div>
 

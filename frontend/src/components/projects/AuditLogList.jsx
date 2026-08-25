@@ -76,23 +76,23 @@ export default function AuditLogList({ projectId, isOwner }) {
 
   return (
     <Card className="mt-8">
-      <CardHeader className="flex items-center justify-between !py-4">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 !py-4">
         <div>
           <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <Activity size={16} className="text-primary-500" />
-            {isOwner ? 'Project Activity Logs' : 'Your Activity'}
+            <Activity size={16} className="text-primary-500 shrink-0" />
+            <span>{isOwner ? 'Project Activity Logs' : 'Your Activity'}</span>
           </h3>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             {isOwner ? 'Track all meaningful actions across this project.' : 'Track your recent actions in this project.'}
           </p>
         </div>
         
-        <label className="flex items-center gap-2 text-sm cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800 px-3 py-1.5 rounded-lg transition-colors">
+        <label className="flex items-center gap-2 text-sm cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800 px-3 py-1.5 rounded-lg transition-colors -ml-3 sm:ml-0 shrink-0">
           <input 
             type="checkbox" 
             checked={includeViews} 
             onChange={(e) => setIncludeViews(e.target.checked)} 
-            className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+            className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500 shrink-0"
           />
           <span className="text-neutral-600 dark:text-neutral-300">Show all activity (including views)</span>
         </label>

@@ -19,8 +19,8 @@ export default function DashboardLayout() {
       <Sidebar onOpenAiSearch={() => setIsAiSearchOpen(true)} />
 
       {/* Main content */}
-      <main className="flex-1 min-w-0 flex flex-col w-full">
-        <div className="flex-1 w-full min-w-0 px-4 py-6 sm:px-6 lg:px-8 pb-24 lg:pb-8 overflow-x-hidden">
+      <main className="flex-1 min-w-0 flex flex-col w-full relative">
+        <div className="flex-1 w-full min-w-0 px-4 py-6 sm:px-6 lg:px-8 pb-24 lg:pb-8">
           <Outlet />
         </div>
       </main>

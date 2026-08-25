@@ -126,7 +126,7 @@ export default function SecretDetailPage() {
           <AlertTriangle size={16} className="shrink-0" />
           {secret.isExpired
             ? `This secret expired on ${formatDate(secret.expiryDate)}`
-            : `Expires in ${days} day${days !== 1 ? 's' : ''} — ${formatDate(secret.expiryDate)}`
+            : `Expires in ${days} day${days !== 1 ? 's' : ''}, ${formatDate(secret.expiryDate)}`
           }
         </div>
       )}

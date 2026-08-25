@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, Link, Clock, MoreHorizontal, Pencil, Trash2, AlertTriangle } from 'lucide-react'
+import { Eye, EyeOff, ExternalLink, Clock, MoreHorizontal, Pencil, Trash2, AlertTriangle } from 'lucide-react'
 import { EnvironmentBadge, CategoryBadge } from '../ui/Badge'
 import CopyButton from './CopyButton'
 import { secretService } from '../../services/secretService'
@@ -91,11 +91,19 @@ export default function SecretCard({ secret, projectId, canEdit = true, onEdit, 
           <span key={tag} className="tag-pill">{tag}</span>
         ))}
         {secret.sourceUrl && (
-          <span title={secret.sourceUrl} className="ml-auto text-neutral-300 hover:text-neutral-500 dark:text-neutral-400 dark:text-neutral-500">
-            <Link size={12} />
-          </span>
+          <a 
+            href={secret.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            title={`Source: ${secret.sourceUrl}`}
+            className="ml-auto flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium rounded-md text-neutral-500 hover:text-primary-600 hover:bg-primary-50 dark:text-neutral-400 dark:hover:text-primary-400 dark:hover:bg-primary-900/30 transition-colors"
+          >
+            Source
+            <ExternalLink size={10} />
+          </a>
         )}
-        <span className="text-[10px] text-neutral-400 dark:text-neutral-500 ml-auto flex items-center gap-1">
+        <span className={cn("text-[10px] text-neutral-400 dark:text-neutral-500 flex items-center gap-1", !secret.sourceUrl && "ml-auto")}>
           <Clock size={10} />
           {formatRelativeDate(secret.createdAt)}
         </span>
