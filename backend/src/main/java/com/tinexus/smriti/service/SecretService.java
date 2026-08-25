@@ -294,7 +294,7 @@ public class SecretService {
                 && s.getExpiryDate().isBefore(today.plusDays(8));
         return new SecretSummaryResponse(
                 s.getId(), s.getName(), s.getServiceName(), s.getEnvironment(),
-                s.getCategory(), s.getTags(), s.getExpiryDate(), expired, expiringSoon,
+                s.getCategory(), s.getTags(), s.getSourceUrl(), s.getExpiryDate(), expired, expiringSoon,
                 s.getProject().getId(), s.getProject().getName(),
                 s.getCreatedAt(), s.getUpdatedAt()
         );

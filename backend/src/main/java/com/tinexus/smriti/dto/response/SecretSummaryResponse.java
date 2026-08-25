@@ -15,6 +15,7 @@ public record SecretSummaryResponse(
         String environment,
         String category,
         String tags,
+        String sourceUrl,
         LocalDate expiryDate,
         boolean isExpired,
         boolean isExpiringSoon,   // within 7 days
