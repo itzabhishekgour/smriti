@@ -63,7 +63,7 @@ export default function SecretDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <Skeleton className="h-5 w-24 mb-6" />
         <Skeleton className="h-8 w-64 mb-2" />
         <SkeletonText lines={3} className="mb-6" />
@@ -78,7 +78,7 @@ export default function SecretDetailPage() {
   if (!secret) return null
 
   return (
-    <div className="max-w-2xl mx-auto w-full min-w-0">
+    <div className="max-w-4xl mx-auto w-full min-w-0">
       {/* Back */}
       <button
         onClick={() => navigate(`/projects/${projectId}`)}

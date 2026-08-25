@@ -62,13 +62,13 @@ function VersionItem({ version, projectId, secretId, canRestore }) {
         </div>
 
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Button variant="secondary" size="xs" onClick={() => setShowValue(!showValue)}>
+          <Button variant="secondary" size="sm" onClick={() => setShowValue(!showValue)}>
             {showValue ? <EyeOff size={14} /> : <Eye size={14} />}
             {showValue ? 'Hide' : 'Reveal'}
           </Button>
           
           {canRestore && (
-            <Button variant="outline" size="xs" onClick={() => setRestoreConfirm(true)}>
+            <Button variant="secondary" size="sm" onClick={() => setRestoreConfirm(true)}>
               <RotateCcw size={14} /> Restore
             </Button>
           )}

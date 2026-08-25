@@ -2,7 +2,7 @@
   <img src="frontend/src/assets/smriti-logo.svg" alt="Smriti Logo" width="120" />
   <h1>Smriti</h1>
   <p><strong>Smriti remembers the context behind your secrets, not just the values.</strong></p>
-  <p><em>by Tinexus — A Tinu's Technology</em></p>
+  <p><em>by Tinexus</em></p>
 </div>
 
 ---
@@ -147,7 +147,7 @@ Please exercise appropriate caution before using Smriti to store mission-critica
 ## 📄 License
 
 **Proprietary and Confidential.**  
-Copyright (c) 2026 Tinexus (A Tinu's Technology). All Rights Reserved.
+Copyright (c) 2026 Tinexus. All Rights Reserved.
 
 This software is NOT open-source. You may not copy, modify, distribute, or use this software without explicit prior written permission from the author. See the `LICENSE` file for full terms and conditions.
 
@@ -156,4 +156,4 @@ This software is NOT open-source. You may not copy, modify, distribute, or use t
 ## 👨‍💻 Author
 
 **Developed by Abhishek Gour (Tinu)**  
-*Tinexus — A Tinu's Technology*
+*Tinexus*

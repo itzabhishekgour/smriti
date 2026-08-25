@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react'
+import { Eye, EyeOff, User, Mail, Lock, ArrowLeft } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { authService } from '../services/authService'
 import Button from '../components/ui/Button'
@@ -86,8 +86,24 @@ export default function SignupPage() {
       </div>
 
       {/* Form */}
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-6 relative">
+        {/* Back to Home (Desktop) */}
+        <div className="absolute top-8 right-8 hidden lg:block">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group">
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+            Back to home
+          </Link>
+        </div>
+
         <div className="w-full max-w-sm">
+          {/* Back to Home (Mobile) */}
+          <div className="mb-6 lg:hidden">
+            <Link to="/" className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group">
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+              Back to home
+            </Link>
+          </div>
+
           <div className="flex items-center gap-2 mb-8 lg:hidden">
             <Logo className="w-8 h-8" />
             <span className="font-semibold text-neutral-900 dark:text-neutral-200">Smriti</span>
