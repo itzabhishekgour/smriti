@@ -29,35 +29,6 @@ function SectionCard({ title, description, children }) {
         {description && <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">{description}</p>}
       </div>
       <div className="px-6 py-5">{children}</div>
-      {/* Token Reveal Modal */}
-      <Modal
-        open={!!createdToken}
-        onClose={() => { setCreatedToken(null); setCopiedToken(false) }}
-        title="Token Created"
-        size="sm"
-      >
-        <div className="p-6 space-y-4">
-          <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800/50 rounded-lg px-4 py-3">
-            <p className="text-xs font-medium text-warning-800 dark:text-warning-400">
-              Copy this token now. It will never be shown again.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <code className="flex-1 text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-3 py-2.5 font-mono text-neutral-700 dark:text-neutral-300 break-all">
-              {createdToken}
-            </code>
-            <button
-              onClick={handleCopyToken}
-              className="shrink-0 p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            >
-              {copiedToken ? <Check size={16} className="text-success-500" /> : <Copy size={16} className="text-neutral-500" />}
-            </button>
-          </div>
-          <div className="flex justify-end">
-            <Button size="sm" onClick={() => { setCreatedToken(null); setCopiedToken(false) }}>Done</Button>
-          </div>
-        </div>
-      </Modal>
     </div>
   )
 }
@@ -70,35 +41,6 @@ function Row({ label, description, action }) {
         {description && <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{description}</p>}
       </div>
       <div className="flex-shrink-0 ml-6">{action}</div>
-      {/* Token Reveal Modal */}
-      <Modal
-        open={!!createdToken}
-        onClose={() => { setCreatedToken(null); setCopiedToken(false) }}
-        title="Token Created"
-        size="sm"
-      >
-        <div className="p-6 space-y-4">
-          <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800/50 rounded-lg px-4 py-3">
-            <p className="text-xs font-medium text-warning-800 dark:text-warning-400">
-              Copy this token now. It will never be shown again.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <code className="flex-1 text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-3 py-2.5 font-mono text-neutral-700 dark:text-neutral-300 break-all">
-              {createdToken}
-            </code>
-            <button
-              onClick={handleCopyToken}
-              className="shrink-0 p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            >
-              {copiedToken ? <Check size={16} className="text-success-500" /> : <Copy size={16} className="text-neutral-500" />}
-            </button>
-          </div>
-          <div className="flex justify-end">
-            <Button size="sm" onClick={() => { setCreatedToken(null); setCopiedToken(false) }}>Done</Button>
-          </div>
-        </div>
-      </Modal>
     </div>
   )
 }
