@@ -65,7 +65,7 @@ export default function SignupPage() {
             Your secrets deserve more than just a value.
           </h2>
           <p className="mt-4 text-primary-300 text-sm leading-relaxed max-w-sm">
-            Store the context, origin story, and memory behind every key. AI-powered search so you never lose track.
+            Store the context, origin story, and memory behind every key. Smart search so you never lose track.
           </p>
         </div>
 

@@ -1,22 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg width="48" height="48" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="sh" x1="0%" y1="0%" x2="85%" y2="100%">
+    <linearGradient id="smriti-shield-grad" x1="0%" y1="0%" x2="85%" y2="100%">
       <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="60%" stop-color="#1D4ED8"/>
       <stop offset="100%" stop-color="#1E3A8A"/>
     </linearGradient>
-    <linearGradient id="ac" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="smriti-accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FBBF24"/>
       <stop offset="100%" stop-color="#EA580C"/>
     </linearGradient>
   </defs>
-  <!-- Shield body -->
-  <path d="M16 2L28 6.2C28 6.2 28.4 18 28 21C27 26.5 22 30 16 31.5C10 30 5 26.5 4 21C3.6 18 4 6.2 4 6.2Z" fill="url(#sh)"/>
-  <!-- Orange accent -->
-  <path d="M28 6.2L28 21C27 26.5 22 30 16 31.5L16 29.5C19.8 28.2 23 25.8 23.5 22.5C24 19.8 23.5 8 23.5 8Z" fill="url(#ac)" opacity="0.9"/>
+
+  <!-- Shield: blue-dominant gradient -->
+  <path d="M150 48
+           L 234 79
+           C 234 79, 237 166, 234 191
+           C 228 222, 193 247, 150 259
+           C 107 247, 72 222, 66 191
+           C 63 166, 66 79, 66 79
+           Z"
+        fill="url(#smriti-shield-grad)"/>
+
+  <!-- Orange accent edge -->
+  <path d="M234 79 L 234 191
+           C 228 222, 193 247, 150 259
+           L 150 245
+           C 185 232, 212 212, 218 188
+           C 221 165, 219 90, 219 90
+           Z"
+        fill="url(#smriti-accent-grad)" opacity="0.9"/>
+
+  <!-- Pixel particles — Tinexus dissolve effect -->
+  <rect x="248" y="58" width="8" height="8" rx="1.5" fill="#FBBF24"/>
+  <rect x="260" y="68" width="6" height="6" rx="1.5" fill="#3B82F6"/>
+  <rect x="244" y="44" width="5" height="5" rx="1" fill="#3B82F6"/>
+  <rect x="266" y="52" width="4" height="4" rx="1" fill="#EA580C"/>
+
   <!-- Padlock shackle -->
-  <path d="M12 16.5C12 13.2 13.8 11 16 11C18.2 11 20 13.2 20 16.5" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <path
+    d="M122 136 C 122 114, 133 100, 150 100 C 167 100, 178 114, 178 136"
+    fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round"
+  />
+
   <!-- Lock body -->
-  <rect fill="white" x="10" y="16" width="12" height="9.5" rx="2.2"/>
-  <!-- S monogram -->
-  <text x="16" y="23.5" font-family="Arial,Helvetica,sans-serif" font-size="7.5" font-weight="800" fill="#1D4ED8" text-anchor="middle">S</text>
+  <rect fill="#FFFFFF" x="106" y="133" width="88" height="76" rx="14"/>
+
+  <!-- S letter -->
+  <text x="150" y="193" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="800" fill="#1D4ED8" text-anchor="middle">S</text>
 </svg>

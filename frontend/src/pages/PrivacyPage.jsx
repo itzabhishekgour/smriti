@@ -32,7 +32,7 @@ export default function PrivacyPage() {
             <p>
               Your secrets are encrypted at rest using industry-standard AES-256-GCM authenticated encryption. 
               We cannot read your unencrypted secrets. Only the backend system possessing the master decryption key can parse the secret values. 
-              Context and metadata are stored in plaintext to enable our AI-powered search features.
+              Context and metadata are stored in plaintext to enable our semantic search features.
             </p>
 
             <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">2. Information We Collect</h2>

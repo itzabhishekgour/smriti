@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /signup
+Allow: /privacy
+Allow: /terms
+
+Disallow: /dashboard
+Disallow: /projects
+Disallow: /notes
+Disallow: /settings
+Disallow: /share/
+Disallow: /oauth-callback
+Disallow: /accept-terms
+Disallow: /link-account
+
+Sitemap: https://smriti.tinexus.in/sitemap.xml

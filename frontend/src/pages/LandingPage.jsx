@@ -43,6 +43,7 @@ export default function LandingPage() {
           Smriti Beta is now live
         </div>
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-neutral-900 dark:text-neutral-50 tracking-tight mb-5 leading-tight">
+          <span className="sr-only">Smriti: </span>
           Never lose track of your{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-500">
             secrets again.
@@ -50,7 +51,7 @@ export default function LandingPage() {
         </h1>
         <p className="mt-4 text-base sm:text-xl text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto mb-8 leading-relaxed px-1">
           Store your API keys, environment variables, and passwords with full context.
-          AI-powered search ensures you find what you need, exactly when you need it.
+          Smart semantic search ensures you find what you need, exactly when you need it.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link to="/signup" className="w-full sm:w-auto">
@@ -276,7 +277,7 @@ export default function LandingPage() {
               </div>
               <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm mb-6">
                 Never lose the context of your secrets again. 
-                Secure, AI-powered secret management built for modern developer workflows.
+                Secure, modern secret management built for developer workflows.
               </p>
             </div>
             
@@ -309,7 +310,16 @@ export default function LandingPage() {
           
           <div className="pt-8 border-t border-neutral-200 dark:border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center md:text-left">
-              © {new Date().getFullYear()} {APP_AUTHOR}. All rights reserved.
+              © {new Date().getFullYear()}{' '}
+              <a
+                href="https://tinexus.in"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors underline-offset-4 hover:underline"
+              >
+                {APP_AUTHOR}
+              </a>
+              . All rights reserved.
             </p>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50">
               <div className="w-2 h-2 rounded-full bg-success-500 animate-pulse"></div>
