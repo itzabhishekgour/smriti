@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getToken } from './auth.js';
 
-const API_BASE = process.env.SMRITI_API_URL || 'http://localhost:8080/api';
+const API_BASE = process.env.SMRITI_API_URL || 'https://api.tinexus.in/api';
 
 export function createApi() {
   const token = getToken();

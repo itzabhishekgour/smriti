@@ -2,7 +2,7 @@
 
 import { Command } from 'commander';
 import { prompt, saveToken, clearToken } from './auth.js';
-import { createApi, publicApi } from './api.js';
+import { createApi } from './api.js';
 import { spawn, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
@@ -45,20 +45,22 @@ function formatEnvValue(value) {
 
 program
   .command('login')
-  .description('Authenticate and store a session locally')
+  .description('Authenticate using a Smriti Personal Access Token')
   .action(async () => {
     try {
-      const email = await prompt('Email: ');
-      const password = await prompt('Password: ', true);
-      console.log(''); // newline after hidden password prompt
-      
-      const res = await publicApi.post('/auth/login', { email, password });
-      const token = res.data.data.token;
-      
+      console.log('Generate a token at: https://smriti.tinexus.in/settings?tab=developer\n');
+      const token = await prompt('Smriti Access Token: ', true);
+      console.log('');
+
+      if (!token.startsWith('smriti_pat_')) {
+        console.error('Invalid token. Token must start with smriti_pat_');
+        process.exit(1);
+      }
+
       saveToken(token);
-      console.log('Successfully logged in.');
+      console.log('Token saved. You are now logged in.');
     } catch (err) {
-      console.error('Login failed:', err.response?.data?.message || err.message);
+      console.error('Login failed:', err.message);
       process.exit(1);
     }
   });

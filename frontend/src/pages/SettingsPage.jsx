@@ -1,10 +1,11 @@
 import { useAuth } from '../hooks/useAuth'
 import { useTheme } from '../hooks/useTheme'
-import { User, Sun, Moon, Monitor, GitBranch, LogOut, Key, ChevronRight, ChevronLeft, FileText, Lock, Shield } from 'lucide-react'
+import { User, Sun, Moon, Monitor, GitBranch, LogOut, Key, ChevronRight, ChevronLeft, FileText, Lock, Shield, Terminal, Copy, Check, Trash2, Plus, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { cn } from '../utils/cn'
 import { githubAccountService } from '../services/githubAccountService'
+import { cliTokenService } from '../services/cliTokenService'
 import { APP_VERSION, APP_AUTHOR } from '../config/version'
 import Button from '../components/ui/Button'
 import toast from 'react-hot-toast'
@@ -17,6 +18,7 @@ const NAV = [
   { id: 'notes',        label: 'Notes',        icon: FileText },
   { id: 'security',     label: 'Security',     icon: Shield },
   { id: 'integrations', label: 'Integrations', icon: GitBranch },
+  { id: 'developer',    label: 'Developer',    icon: Terminal },
 ]
 
 function SectionCard({ title, description, children }) {
@@ -27,6 +29,35 @@ function SectionCard({ title, description, children }) {
         {description && <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">{description}</p>}
       </div>
       <div className="px-6 py-5">{children}</div>
+      {/* Token Reveal Modal */}
+      <Modal
+        open={!!createdToken}
+        onClose={() => { setCreatedToken(null); setCopiedToken(false) }}
+        title="Token Created"
+        size="sm"
+      >
+        <div className="p-6 space-y-4">
+          <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800/50 rounded-lg px-4 py-3">
+            <p className="text-xs font-medium text-warning-800 dark:text-warning-400">
+              Copy this token now. It will never be shown again.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <code className="flex-1 text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-3 py-2.5 font-mono text-neutral-700 dark:text-neutral-300 break-all">
+              {createdToken}
+            </code>
+            <button
+              onClick={handleCopyToken}
+              className="shrink-0 p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              {copiedToken ? <Check size={16} className="text-success-500" /> : <Copy size={16} className="text-neutral-500" />}
+            </button>
+          </div>
+          <div className="flex justify-end">
+            <Button size="sm" onClick={() => { setCreatedToken(null); setCopiedToken(false) }}>Done</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
@@ -39,6 +70,35 @@ function Row({ label, description, action }) {
         {description && <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{description}</p>}
       </div>
       <div className="flex-shrink-0 ml-6">{action}</div>
+      {/* Token Reveal Modal */}
+      <Modal
+        open={!!createdToken}
+        onClose={() => { setCreatedToken(null); setCopiedToken(false) }}
+        title="Token Created"
+        size="sm"
+      >
+        <div className="p-6 space-y-4">
+          <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800/50 rounded-lg px-4 py-3">
+            <p className="text-xs font-medium text-warning-800 dark:text-warning-400">
+              Copy this token now. It will never be shown again.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <code className="flex-1 text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-3 py-2.5 font-mono text-neutral-700 dark:text-neutral-300 break-all">
+              {createdToken}
+            </code>
+            <button
+              onClick={handleCopyToken}
+              className="shrink-0 p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              {copiedToken ? <Check size={16} className="text-success-500" /> : <Copy size={16} className="text-neutral-500" />}
+            </button>
+          </div>
+          <div className="flex justify-end">
+            <Button size="sm" onClick={() => { setCreatedToken(null); setCopiedToken(false) }}>Done</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
@@ -58,11 +118,74 @@ export default function SettingsPage() {
     return localStorage.getItem('smriti_autosave') !== 'false'
   })
 
+  // Developer tab state
+  const [cliTokens, setCliTokens] = useState([])
+  const [cliTokensLoading, setCliTokensLoading] = useState(false)
+  const [showCreateToken, setShowCreateToken] = useState(false)
+  const [newTokenName, setNewTokenName] = useState('')
+  const [newTokenExpiry, setNewTokenExpiry] = useState('never')
+  const [creatingToken, setCreatingToken] = useState(false)
+  const [createdToken, setCreatedToken] = useState(null)
+  const [copiedToken, setCopiedToken] = useState(false)
+  const [revokingId, setRevokingId] = useState(null)
+
   const toggleAutoSave = () => {
     const newValue = !autoSaveEnabled
     setAutoSaveEnabled(newValue)
     localStorage.setItem('smriti_autosave', newValue)
     toast.success(`Auto-save ${newValue ? 'enabled' : 'disabled'}`)
+  }
+
+  // Load CLI tokens when developer tab is opened
+  useEffect(() => {
+    if (activeTab === 'developer') {
+      setCliTokensLoading(true)
+      cliTokenService.list()
+        .then(setCliTokens)
+        .catch(() => toast.error('Failed to load tokens'))
+        .finally(() => setCliTokensLoading(false))
+    }
+  }, [activeTab])
+
+  const handleCreateToken = async (e) => {
+    e.preventDefault()
+    if (!newTokenName.trim()) return toast.error('Token name is required')
+    setCreatingToken(true)
+    try {
+      let expiresAt = null
+      if (newTokenExpiry === '30') expiresAt = new Date(Date.now() + 30 * 86400000).toISOString()
+      else if (newTokenExpiry === '90') expiresAt = new Date(Date.now() + 90 * 86400000).toISOString()
+
+      const result = await cliTokenService.create({ name: newTokenName.trim(), expiresAt })
+      setCreatedToken(result.token)
+      setCliTokens(prev => [...prev, { id: result.id, name: result.name, createdAt: result.createdAt, lastUsedAt: null, expiresAt }])
+      setNewTokenName('')
+      setNewTokenExpiry('never')
+      setShowCreateToken(false)
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to create token')
+    } finally {
+      setCreatingToken(false)
+    }
+  }
+
+  const handleRevokeToken = async (id) => {
+    setRevokingId(id)
+    try {
+      await cliTokenService.revoke(id)
+      setCliTokens(prev => prev.filter(t => t.id !== id))
+      toast.success('Token revoked')
+    } catch {
+      toast.error('Failed to revoke token')
+    } finally {
+      setRevokingId(null)
+    }
+  }
+
+  const handleCopyToken = async () => {
+    await navigator.clipboard.writeText(createdToken)
+    setCopiedToken(true)
+    setTimeout(() => setCopiedToken(false), 2000)
   }
 
   useEffect(() => {
@@ -444,6 +567,120 @@ export default function SettingsPage() {
             </SectionCard>
           )}
 
+          {/* ── DEVELOPER ── */}
+          {activeTab === 'developer' && (
+            <>
+              <SectionCard
+                title="CLI Access Tokens"
+                description="Use these tokens to authenticate the Smriti CLI. Each token has access to all your projects."
+              >
+                {cliTokensLoading ? (
+                  <div className="space-y-3">
+                    {[1, 2].map(i => (
+                      <div key={i} className="h-12 bg-neutral-100 dark:bg-neutral-800 animate-pulse rounded-lg" />
+                    ))}
+                  </div>
+                ) : cliTokens.length === 0 ? (
+                  <p className="text-sm text-neutral-400 dark:text-neutral-500 py-4 text-center">
+                    No tokens yet. Generate one to use the Smriti CLI.
+                  </p>
+                ) : (
+                  <div className="space-y-0 divide-y divide-neutral-100 dark:divide-neutral-800">
+                    {cliTokens.map(token => (
+                      <div key={token.id} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                        <div>
+                          <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{token.name}</p>
+                          <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">
+                            Created {new Date(token.createdAt).toLocaleDateString()}
+                            {token.lastUsedAt && ` · Last used ${new Date(token.lastUsedAt).toLocaleDateString()}`}
+                            {token.expiresAt && ` · Expires ${new Date(token.expiresAt).toLocaleDateString()}`}
+                            {!token.expiresAt && ' · No expiry'}
+                          </p>
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          loading={revokingId === token.id}
+                          onClick={() => handleRevokeToken(token.id)}
+                          className="text-danger-600 border-danger-200 hover:bg-danger-50 dark:text-danger-400 dark:border-danger-800 dark:hover:bg-danger-900/30 shrink-0 ml-4"
+                        >
+                          <Trash2 size={13} />
+                          Revoke
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="mt-5 pt-5 border-t border-neutral-100 dark:border-neutral-800">
+                  {!showCreateToken ? (
+                    <Button size="sm" onClick={() => setShowCreateToken(true)}>
+                      <Plus size={14} />
+                      Generate Token
+                    </Button>
+                  ) : (
+                    <form onSubmit={handleCreateToken} className="space-y-4 max-w-sm">
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Token Name</label>
+                        <input
+                          type="text"
+                          className="input-base w-full"
+                          placeholder="e.g. Local dev, CI/CD"
+                          value={newTokenName}
+                          onChange={e => setNewTokenName(e.target.value)}
+                          autoFocus
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Expiry</label>
+                        <select
+                          className="input-base w-full"
+                          value={newTokenExpiry}
+                          onChange={e => setNewTokenExpiry(e.target.value)}
+                        >
+                          <option value="never">No expiry</option>
+                          <option value="30">30 days</option>
+                          <option value="90">90 days</option>
+                        </select>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button type="submit" size="sm" loading={creatingToken} disabled={!newTokenName.trim()}>
+                          Generate
+                        </Button>
+                        <Button type="button" variant="secondary" size="sm" onClick={() => { setShowCreateToken(false); setNewTokenName(''); setNewTokenExpiry('never') }}>
+                          Cancel
+                        </Button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              </SectionCard>
+
+              <SectionCard title="CLI Setup" description="Install and configure the Smriti CLI tool.">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wide">Install</p>
+                    <code className="block text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-4 py-3 font-mono text-neutral-700 dark:text-neutral-300">
+                      npm install -g smriti-cli
+                    </code>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wide">Login</p>
+                    <code className="block text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-4 py-3 font-mono text-neutral-700 dark:text-neutral-300">
+                      smriti login
+                    </code>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wide">Pull secrets</p>
+                    <code className="block text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-4 py-3 font-mono text-neutral-700 dark:text-neutral-300">
+                      smriti pull my-project
+                    </code>
+                  </div>
+                </div>
+              </SectionCard>
+            </>
+          )}
+
           {/* Footer */}
           <p className="text-xs text-neutral-400 dark:text-neutral-600 text-center py-2">
             Smriti {APP_VERSION} · {APP_AUTHOR}
@@ -472,6 +709,35 @@ export default function SettingsPage() {
             >
               Disconnect
             </Button>
+          </div>
+        </div>
+      </Modal>
+      {/* Token Reveal Modal */}
+      <Modal
+        open={!!createdToken}
+        onClose={() => { setCreatedToken(null); setCopiedToken(false) }}
+        title="Token Created"
+        size="sm"
+      >
+        <div className="p-6 space-y-4">
+          <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800/50 rounded-lg px-4 py-3">
+            <p className="text-xs font-medium text-warning-800 dark:text-warning-400">
+              Copy this token now. It will never be shown again.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <code className="flex-1 text-xs bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-3 py-2.5 font-mono text-neutral-700 dark:text-neutral-300 break-all">
+              {createdToken}
+            </code>
+            <button
+              onClick={handleCopyToken}
+              className="shrink-0 p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              {copiedToken ? <Check size={16} className="text-success-500" /> : <Copy size={16} className="text-neutral-500" />}
+            </button>
+          </div>
+          <div className="flex justify-end">
+            <Button size="sm" onClick={() => { setCreatedToken(null); setCopiedToken(false) }}>Done</Button>
           </div>
         </div>
       </Modal>
