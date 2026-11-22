@@ -51,7 +51,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">4. Contact Us</h2>
             <p>
               If you have any questions about this Privacy Policy, please contact us at{' '}
-              <a href="mailto:mrasgour1004@gmail.com" className="text-primary-600 dark:text-primary-400 hover:underline">mrasgour1004@gmail.com</a>.
+              <a href="mailto:support@tinexus.in" className="text-primary-600 dark:text-primary-400 hover:underline">support@tinexus.in</a>.
             </p>
           </div>
         </div>
